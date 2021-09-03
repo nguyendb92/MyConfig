@@ -1,83 +1,102 @@
 {
-    "C_Cpp.updateChannel": "Insiders",
-    "kite.showWelcomeNotificationOnStartup": false,
-    "code-runner.saveAllFilesBeforeRun": true,
-    "code-runner.saveFileBeforeRun": true,
-    "code-runner.runInTerminal": true,
-    "workbench.editorAssociations": {
-        "*.ipynb": "jupyter.notebook.ipynb"
+  "C_Cpp.updateChannel": "Insiders",
+  "kite.showWelcomeNotificationOnStartup": false,
+  "code-runner.saveAllFilesBeforeRun": true,
+  "code-runner.saveFileBeforeRun": true,
+  "code-runner.runInTerminal": true,
+  "workbench.editorAssociations": {
+      "*.ipynb": "jupyter.notebook.ipynb"
+  },
+  "git.autofetch": true,
+  "indentRainbow.colors": [
+  
+      "rgba(255,255,64,0.07)",
+      "rgba(127,255,127,0.07)",
+      "rgba(255,127,255,0.07)",
+      "rgba(79,236,236,0.07)"
+  ],
+  "workbench.colorTheme": "Atom One Dark",
+  "security.workspace.trust.untrustedFiles": "open",
+  "vim.easymotion": true,
+  "vim.hlsearch": true,
+  "vim.leader": "<Space>",
+  "vim.statusBarColorControl": true,
+  "vim.statusBarColors.normal": ["#8FBCBB", "#434C5E"],
+  "vim.statusBarColors.insert": "#BF616A",
+  "vim.statusBarColors.visual": "#B48EAD",
+  "vim.statusBarColors.visualline": "#B48EAD",
+  "vim.statusBarColors.visualblock": "#A3BE8C",
+  "vim.statusBarColors.replace": "#D08770",
+  "vim.statusBarColors.commandlineinprogress": "#007ACC",
+  "vim.statusBarColors.searchinprogressmode": "#007ACC",
+  "vim.statusBarColors.easymotionmode": "#007ACC",
+  "vim.statusBarColors.easymotioninputmode": "#007ACC",
+  "vim.statusBarColors.surroundinputmode": "#007ACC",
+  "vim.insertModeKeyBindingsNonRecursive": [
+    {
+      "before": ["j", "k"],
+      "after": ["<ESC>"]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [    {
+      "before": ["u"],
+      "commands": ["undo"]
     },
-    "git.autofetch": true,
-    "indentRainbow.colors": [
-    
-        "rgba(255,255,64,0.07)",
-        "rgba(127,255,127,0.07)",
-        "rgba(255,127,255,0.07)",
-        "rgba(79,236,236,0.07)"
-    ],
-    "workbench.colorTheme": "Atom One Dark",
-    "security.workspace.trust.untrustedFiles": "open",
-    "vim.easymotion": true,
-    "vim.hlsearch": true,
-    "vim.leader": "<Space>",
-    "vim.insertModeKeyBindingsNonRecursive": [
-      {
-        "before": ["j", "k"],
-        "after": ["<ESC>"]
-      }
-    ],
-    "vim.normalModeKeyBindingsNonRecursive": [    {
-        "before": ["u"],
-        "commands": ["undo"]
-      },
-      {
-        "before": ["C-r"],
-        "commands": ["redo"]
-      },
-      {
-        "before": ["<Leader>", "/"],
-        "commands": [":noh"]
-      },
-      {
-        "before": ["<Leader>", "t", "t"],
-        "commands": [":tabnew"]
-      },
-      {
-        "before": ["<Leader>", "t", "n"],
-        "commands": [":tabnext"]
-      },
-      {
-        "before": ["<Leader>", "t", "p"],
-        "commands": [":tabprev"]
-      },
-      {
-        "before": ["<Leader>", "t", "o"],
-        "commands": [":tabo"]
-      },
-      {
-        "before": ["<C-h>"],
-        "after": ["<C-w>", "h"]
-      },
-      {
-        "before": ["<C-j>"],
-        "after": ["<C-w>", "j"]
-      },
-      {
-        "before": ["<C-k>"],
-        "after": ["<C-w>", "k"]
-      },
-      {
-        "before": ["<C-l>"],
-        "after": ["<C-w>", "l"]
-      },
+    {
+      "before": ["C-r"],
+      "commands": ["redo"]
+    },
+    {
+      "before": ["<Leader>", "/"],
+      "commands": [":noh"]
+    },
+    {
+      "before": ["<Leader>", "t", "t"],
+      "commands": [":tabnew"]
+    },
+    {
+      "before": ["<Leader>", "t", "n"],
+      "commands": [":tabnext"]
+    },
+    {
+      "before": ["<Leader>", "t", "p"],
+      "commands": [":tabprev"]
+    },
+    {
+      "before": ["<Leader>", "t", "o"],
+      "commands": [":tabo"]
+    },
+    {
+      "before": ["<C-h>"],
+      "after": ["<C-w>", "h"]
+    },
+    {
+      "before": ["<C-j>"],
+      "after": ["<C-w>", "j"]
+    },
+    {
+      "before": ["<C-k>"],
+      "after": ["<C-w>", "k"]
+    },
+    {
+      "before": ["<C-l>"],
+      "after": ["<C-w>", "l"]
+    },
 
-    ],
-    "editor.minimap.enabled": false,
-    "editor.renderControlCharacters": true,
-    "explorer.confirmDelete": false,
-    "files.autoSave": "afterDelay",
-    "window.zoomLevel": 1,
-    "workbench.iconTheme": "vscode-icons",
-    "terminal.integrated.defaultProfile.windows": "Ubuntu-20.04 (WSL)",
-    "tabnine.experimentalAutoImports": true
+  ],
+  "editor.minimap.enabled": false,
+  "editor.renderControlCharacters": true,
+  "explorer.confirmDelete": false,
+  "files.autoSave": "afterDelay",
+  "window.zoomLevel": 1,
+  "workbench.iconTheme": "vscode-icons",
+  "terminal.integrated.defaultProfile.windows": "Ubuntu-20.04 (WSL)",
+  "tabnine.experimentalAutoImports": true,
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#B48EAD",
+    "statusBar.noFolderBackground": "#B48EAD",
+    "statusBar.debuggingBackground": "#B48EAD",
+    "statusBar.foreground": "#434C5E",
+    "statusBar.debuggingForeground": "#434C5E"
+  }
 }
