@@ -201,4 +201,5 @@
     "workbench.startupEditor": "newUntitledFile",
     "workbench.colorTheme": "Predawn",
     "editor.tabSize": 4,
+    "vim.useSystemClipboard": true,
 }
