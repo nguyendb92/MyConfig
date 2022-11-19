@@ -142,6 +142,22 @@
                 "l"
             ]
         },
+           {
+            "before": [
+                "L"
+            ],
+            "after": [
+                "g", "_"
+            ]
+        },
+        {
+            "before": [
+                "H"
+            ],
+            "after": [
+                "^",
+            ]
+        },
     ],
     "editor.minimap.enabled": false,
     "editor.renderControlCharacters": true,
