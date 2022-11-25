@@ -1,10 +1,6 @@
 // Place your key bindings in this file to override the defaultsauto[]
 [
     {
-        "key": "ctrl+shift+c",
-        "command": "editor.action.clipboardCopyAction"
-    },
-    {
         "key": "ctrl+c",
         "command": "-editor.action.clipboardCopyAction"
     },
@@ -12,10 +8,6 @@
         "key": "ctrl+k ctrl+shift+c",
         "command": "-copyRelativeFilePath",
         "when": "!editorFocus"
-    },
-    {
-        "key": "ctrl+shift+v",
-        "command": "editor.action.clipboardPasteAction"
     },
     {
         "key": "ctrl+v",
@@ -52,5 +44,55 @@
         "key": "ctrl+j",
         "command": "selectNextSuggestion",
         "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "-extension.vim_ctrl+b",
+        "when": "editorTextFocus && vim.active && vim.use<C-b> && !inDebugRepl && vim.mode != 'Insert'"
+    },
+    {
+        "key": "ctrl+c",
+        "command": "-filesExplorer.copy",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus"
+    },
+    {
+        "key": "ctrl+insert",
+        "command": "filesExplorer.copy",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "shift+delete",
+        "command": "filesExplorer.cut",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "ctrl+x",
+        "command": "-filesExplorer.cut",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "shift+delete",
+        "command": "-deleteFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "ctrl+v",
+        "command": "-filesExplorer.paste",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "shift+insert",
+        "command": "filesExplorer.paste",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "shift+insert",
+        "command": "markdown.extension.editing.paste",
+        "when": "editorHasSelection && editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^qmd$/"
+    },
+    {
+        "key": "ctrl+v",
+        "command": "-markdown.extension.editing.paste",
+        "when": "editorHasSelection && editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^qmd$/"
     }
 ]
