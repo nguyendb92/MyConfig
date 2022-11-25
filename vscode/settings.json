@@ -1,10 +1,6 @@
 {
-    "kite.showWelcomeNotificationOnStartup": false,
     "code-runner.saveAllFilesBeforeRun": true,
     "code-runner.runInTerminal": true,
-    "workbench.editorAssociations": {
-        "*.ipynb": "jupyter.notebook.ipynb"
-    },
     "git.autofetch": true,
     "security.workspace.trust.untrustedFiles": "open",
     "vim.easymotion": true,
@@ -142,7 +138,7 @@
                 "l"
             ]
         },
-           {
+        {
             "before": [
                 "L"
             ],
@@ -158,12 +154,35 @@
                 "^",
             ]
         },
+        {
+            "before": [
+                "J"
+            ],
+            "after": [
+                "5", "j"
+            ]
+        },
+        {
+            "before": [
+                "K"
+            ],
+            "after": [
+                "5", "k"
+            ]
+        },
+        {
+            "before": [
+                "'"
+            ],
+            "after": [
+                "`"
+            ]
+        },
     ],
     "editor.minimap.enabled": false,
-    "editor.renderControlCharacters": true,
     "explorer.confirmDelete": false,
-    "files.autoSave": "afterDelay",
-    "workbench.iconTheme": "Monokai Pro (Filter Octagon) Icons",
+    "files.autoSave": "onWindowChange",
+    "workbench.iconTheme": "vscode-icons",
     "terminal.integrated.defaultProfile.windows": "Command Prompt",
     "workbench.colorCustomizations": {
         "statusBar.background": "#B48EAD",
@@ -172,17 +191,14 @@
         "statusBar.foreground": "#434C5E",
         "statusBar.debuggingForeground": "#434C5E"
     },
-    "editor.fontSize": 16,
+    "editor.fontSize": 14,
     "editor.fontWeight": "500",
-    "editor.fontFamily": "Source Code Pro",
-    "debug.console.fontFamily": "Source Code Pro",
-    "debug.console.fontSize": 16,
+    "debug.console.fontSize": 14,
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.fontWeight": "600",
-    "window.zoomLevel": 1,
     // "python.pythonPath": "/usr/local/bin/python3",
     "python.formatting.provider": "black",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "code-runner.executorMap": {
@@ -190,7 +206,6 @@
     },
     "code-runner.clearPreviousOutput": true,
     "code-runner.showExecutionMessage": false,
-    "coderunner.ignoreSelection": true,
     "code-runner.saveFileBeforeRun": true,
     "zenMode.centerLayout": false,
     "zenMode.fullScreen": false,
@@ -199,7 +214,50 @@
     "workbench.settings.openDefaultSettings": true,
     "workbench.settings.editor": "json",
     "workbench.startupEditor": "newUntitledFile",
-    "workbench.colorTheme": "Predawn",
     "editor.tabSize": 4,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "sync.gist": "6ffdf9358fe661a84b3bfe77d0db035d",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu-20.04 (WSL)": {
+            "path": "C:\\Windows\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu-20.04"
+            ]
+        },
+        "Windows PowerShell": {
+            "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        }
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.formatOnType": true
+    },
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "editor.renderWhitespace": "all",
+    "window.zoomLevel": 1,
+    "typescript.suggest.autoImports": false,
+    "python.analysis.autoImportCompletions": false,
+    "DockerRun.DisableAutoGenerateConfig": true,
+    "editor.inlineSuggest.enabled": true,
+    "notebook.lineNumbers": "on",
+    "hediet.vscode-drawio.theme": "dark",
     "vim.useSystemClipboard": true,
+    "cSpell.enabled": false,
 }
