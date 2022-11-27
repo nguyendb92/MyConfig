@@ -13,6 +13,8 @@ filetype plugin on
 filetype indent on
 " Turn syntax highlighting on.
 syntax on
+set autoindent
+set smartindent
 
 
 " PLUGINS ---------------------------------------------------------------- {{{
@@ -39,6 +41,14 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
+
+nnoremap H ^
+nnoremap L g_
+nnoremap J 5j
+nnoremap K 5k
+
+nnoremap ' `
+
 
 nnoremap o o<esc>
 nnoremap O O<esc>
