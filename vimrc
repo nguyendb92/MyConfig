@@ -64,7 +64,7 @@ let NERDTreeIgnore=['\.git$', '\.jpg$', '\.mp4$', '\.ogg$', '\.iso$', '\.pdf$', 
 
 
 " Highlight cursor line underneath the cursor horizontally.
-set cursorline
+" set cursorline
 
 " Set shift width to 4 spaces.
 set shiftwidth=4
@@ -154,11 +154,11 @@ endif
 
 " You can split a window into sections by typing `:split` or `:vsplit`.
 " Display cursorline and cursorcolumn ONLY in active window.
-augroup cursor_off
-    autocmd!
-    autocmd WinLeave * set nocursorline nocursorcolumn
-    autocmd WinEnter * set cursorline cursorcolumn
-augroup END
+" augroup cursor_off
+"     autocmd!
+"     autocmd WinLeave * set nocursorline nocursorcolumn
+"     autocmd WinEnter * set cursorline cursorcolumn
+" augroup END
 
 " If GUI version of Vim is running set these options.
 if has('gui_running')
