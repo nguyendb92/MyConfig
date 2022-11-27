@@ -39,6 +39,38 @@
     "vim.normalModeKeyBindingsNonRecursive": [
         {
             "before": [
+                "<C-up>"
+            ],
+            "commands": [
+                "workbench.action.increaseViewHeight"
+            ]
+        },
+        {
+            "before": [
+                "<C-down>"
+            ],
+            "commands": [
+                "workbench.action.decreaseViewHeight"
+            ]
+        },
+        {
+            "before": [
+                "<C-left>"
+            ],
+            "commands": [
+                "workbench.action.decreaseViewWidth"
+            ]
+        },
+        {
+            "before": [
+                "<C-right>"
+            ],
+            "commands": [
+                "workbench.action.increaseViewWidth"
+            ]
+        },
+        {
+            "before": [
                 "u"
             ],
             "commands": [
@@ -178,6 +210,24 @@
                 "`"
             ]
         },
+        {
+            "before": [
+                "O"
+            ],
+            "after": [
+                "O",
+                "<ESC>"
+            ]
+        },
+        {
+            "before": [
+                "o"
+            ],
+            "after": [
+                "o",
+                "<ESC>"
+            ]
+        },
     ],
     "editor.minimap.enabled": false,
     "explorer.confirmDelete": false,
@@ -185,9 +235,9 @@
     "workbench.iconTheme": "vscode-icons",
     "terminal.integrated.defaultProfile.windows": "Command Prompt",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#B48EAD",
-        "statusBar.noFolderBackground": "#B48EAD",
-        "statusBar.debuggingBackground": "#B48EAD",
+        "statusBar.background": "#BF616A",
+        "statusBar.noFolderBackground": "#BF616A",
+        "statusBar.debuggingBackground": "#BF616A",
         "statusBar.foreground": "#434C5E",
         "statusBar.debuggingForeground": "#434C5E"
     },
@@ -246,12 +296,10 @@
         }
     },
     "[python]": {
-        "editor.defaultFormatter": "ms-python.python",
-        "editor.formatOnType": true
+        "editor.defaultFormatter": "ms-python.python"
     },
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "editor.renderWhitespace": "all",
-    "window.zoomLevel": 1,
     "typescript.suggest.autoImports": false,
     "python.analysis.autoImportCompletions": false,
     "DockerRun.DisableAutoGenerateConfig": true,
@@ -260,4 +308,5 @@
     "hediet.vscode-drawio.theme": "dark",
     "vim.useSystemClipboard": true,
     "cSpell.enabled": false,
+    "window.zoomLevel": 1,
 }
