@@ -352,9 +352,10 @@
     "code-runner.clearPreviousOutput": true,
     "code-runner.showExecutionMessage": false,
     "code-runner.saveFileBeforeRun": true,
-    "zenMode.centerLayout": false,
-    "zenMode.fullScreen": false,
+    "zenMode.centerLayout": true,
+    "zenMode.fullScreen": true,
     "zenMode.hideLineNumbers": false,
+    "zenMode.hideStatusBar": false,
     "zenMode.hideTabs": false,
     "workbench.settings.openDefaultSettings": true,
     "workbench.settings.editor": "json",
@@ -391,7 +392,8 @@
         }
     },
     "[python]": {
-        "editor.defaultFormatter": "ms-python.python"
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.formatOnType": true
     },
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "editor.renderWhitespace": "all",
