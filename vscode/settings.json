@@ -50,7 +50,17 @@
         }
     ],
     "vim.normalModeKeyBindingsNonRecursive": [
-        {
+       {
+            "before": [
+              "<leader>",
+              "s",
+              "b"
+            ],
+            "commands": [
+             "workbench.action.toggleSidebarVisibility",
+            ]
+          },
+           {
             "before": [
               "<leader>",
               "c",
