@@ -25,6 +25,19 @@
     "vim.statusBarColors.easymotionmode": "#007ACC",
     "vim.statusBarColors.easymotioninputmode": "#007ACC",
     "vim.statusBarColors.surroundinputmode": "#007ACC",
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+          "before": [
+            "g",
+            "y"
+          ],
+          "after": [
+            "y",
+            "`",
+            "y"
+          ]
+        },
+      ],
     "vim.insertModeKeyBindingsNonRecursive": [
         {
             "before": [
@@ -37,6 +50,78 @@
         }
     ],
     "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+              "<leader>",
+              "c",
+              "o"
+            ],
+            "commands": [
+             "workbench.action.closeEditorsInOtherGroups",
+            ]
+          },
+          {
+            "before": [
+              "<leader>",
+              "c",
+              "a"
+            ],
+            "commands": [
+             "workbench.action.closeAllEditors",
+            ]
+          },
+          {
+            "before": [
+              "<leader>",
+              "c",
+              "w"
+            ],
+            "commands": [
+              "workbench.action.closeActiveEditor",
+            ]
+          },
+          {
+            "before": [
+              "<leader>",
+              "g",
+              "i"
+            ],
+            "after": [
+              "g",
+              "i",
+              "<ESC>",
+            ]
+          },
+          {
+            "before": [
+              "V",
+            ],
+            "after": [
+              "m",
+              "y",
+              "V"
+            ]
+          },
+          {
+            "before": [
+              "v",
+            ],
+            "after": [
+              "m",
+              "y",
+              "v"
+            ]
+          },
+          {
+            "before": [
+              "<leader>",
+              "z",
+              "m"
+            ],
+            "commands": [
+            "workbench.action.toggleZenMode"
+            ]
+          },
         {
             "before": [
                 "<C-up>"
@@ -235,9 +320,9 @@
     "workbench.iconTheme": "vscode-icons",
     "terminal.integrated.defaultProfile.windows": "Command Prompt",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#BF616A",
-        "statusBar.noFolderBackground": "#BF616A",
-        "statusBar.debuggingBackground": "#BF616A",
+        "statusBar.background": "#8FBCBB",
+        "statusBar.noFolderBackground": "#8FBCBB",
+        "statusBar.debuggingBackground": "#8FBCBB",
         "statusBar.foreground": "#434C5E",
         "statusBar.debuggingForeground": "#434C5E"
     },
