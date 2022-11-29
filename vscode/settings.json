@@ -53,6 +53,15 @@
        {
             "before": [
               "<leader>",
+              "p"
+            ],
+            "commands": [
+             "workbench.action.showCommands"
+            ]
+          },
+       {
+            "before": [
+              "<leader>",
               "s",
               "b"
             ],
@@ -330,9 +339,9 @@
     "workbench.iconTheme": "vscode-icons",
     "terminal.integrated.defaultProfile.windows": "Command Prompt",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#8FBCBB",
-        "statusBar.noFolderBackground": "#8FBCBB",
-        "statusBar.debuggingBackground": "#8FBCBB",
+        "statusBar.background": "#B48EAD",
+        "statusBar.noFolderBackground": "#B48EAD",
+        "statusBar.debuggingBackground": "#B48EAD",
         "statusBar.foreground": "#434C5E",
         "statusBar.debuggingForeground": "#434C5E"
     },
@@ -406,4 +415,10 @@
     "vim.useSystemClipboard": true,
     "cSpell.enabled": false,
     "window.zoomLevel": 1,
+    "workbench.colorTheme": "One Dark Pro Darker",
+    // "pomodoro.work": 0.1,
+    // "pomodoro.break": 0.1,
+    // pomodoro.repeat : how many pomodoros in a set
+    // pomodoro.longBreak : time of break between sets
+    "pomodoro.autoStart": false,
 }
