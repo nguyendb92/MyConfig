@@ -8,7 +8,9 @@
     "vim.leader": "<Space>",
     "vim.handleKeys": {
         "<C-a>": false,
-        "<C-f>": false
+        "<C-f>": false,
+        "<C-v>": false,
+        "<C-c>": false,
     },
     "vim.statusBarColorControl": true,
     "vim.statusBarColors.normal": [
