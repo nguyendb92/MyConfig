@@ -8,82 +8,36 @@
 # Includes: Development tools, Node.js, Python, Docker, Database, Vim, VS Code
 # =============================================================================
 
-set -e  # Exit on any error
-
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
-
-# Logging functions
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+# Load common functions and constants
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/common.sh" 2>/dev/null || {
+    echo "❌ ERROR: Cannot load common library. Please ensure lib/common.sh exists."
+    exit 1
 }
 
-log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-log_section() {
-    echo -e "\n${PURPLE}=== $1 ===${NC}"
-}
+# Initialize common settings
+init_common
 
 # Global variables
 IS_WSL=false
 
-# Detect if running in WSL
-detect_wsl() {
-    if [[ -f /proc/version ]] && grep -qi "microsoft\|wsl" /proc/version; then
-        IS_WSL=true
-        log_info "Detected WSL environment"
-        return 0
-    elif [[ -n "${WSL_DISTRO_NAME}" ]]; then
-        IS_WSL=true
-        log_info "Detected WSL environment (WSL_DISTRO_NAME set)"
-        return 0
-    elif [[ $(uname -r) =~ Microsoft|microsoft|WSL|wsl ]]; then
-        IS_WSL=true
-        log_info "Detected WSL environment (kernel info)"
-        return 0
-    else
-        log_info "Detected native Ubuntu environment"
-        return 1
-    fi
-}
-
-# Check if running as root
-check_root() {
-    if [[ $EUID -eq 0 ]]; then
-        log_error "This script should not be run as root"
-        exit 1
-    fi
-}
+# =============================================================================
+# MAIN SETUP FUNCTIONS
+# =============================================================================
 
 # Update system packages
 update_system() {
     log_section "UPDATING SYSTEM PACKAGES"
-    log_info "Updating package lists..."
-    sudo apt update
+    log_namespace "SYSTEM" "INFO" "Updating package lists..."
+    safe_execute "sudo apt update"
     
-    log_info "Upgrading existing packages..."
-    sudo apt upgrade -y
+    log_namespace "SYSTEM" "INFO" "Upgrading existing packages..."
+    safe_execute "sudo apt upgrade -y"
     
-    log_info "Installing essential build tools..."
-    sudo apt install -y build-essential software-properties-common apt-transport-https ca-certificates
+    log_namespace "SYSTEM" "INFO" "Installing essential build tools..."
+    safe_execute "sudo apt install -y build-essential software-properties-common apt-transport-https ca-certificates"
     
-    log_success "System updated successfully"
+    log_namespace "SYSTEM" "SUCCESS" "System updated successfully"
 }
 
 # Install basic development tools
@@ -100,23 +54,29 @@ install_dev_tools() {
         "tree"
         "htop"
         "neofetch"
-        "jq"
-        "tmux"
         "zsh"
-        "fonts-powerline"
-        "build-essential"
-        "ca-certificates"
-        "gnupg"
-        "lsb-release"
+        "tmux"
+        "jq"
+        "make"
+        "gcc"
+        "g++"
+        "python3-pip"
     )
     
+    log_namespace "TOOLS" "INFO" "Installing development tools: ${tools[*]}"
+    
     for tool in "${tools[@]}"; do
-        log_info "Installing $tool..."
-        sudo apt install -y "$tool"
+        if ! package_installed "$tool"; then
+            log_namespace "TOOLS" "INFO" "Installing $tool..."
+            safe_execute "sudo apt install -y $tool"
+        else
+            log_namespace "TOOLS" "DEBUG" "$tool already installed"
+        fi
     done
     
-    log_success "Development tools installed successfully"
+    log_namespace "TOOLS" "SUCCESS" "Development tools installed successfully"
 }
+
 
 # Install and configure Git
 setup_git() {
@@ -634,7 +594,6 @@ install_additional_tools() {
             "postman"
             "slack --classic"
             "discord"
-            "telegram-desktop"
             "spotify"
             "code --classic"
         )

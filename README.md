@@ -13,9 +13,11 @@ Repository này chứa các script tự động hóa để thiết lập môi tr
 - **Shell**: Zsh với Oh My Zsh và custom aliases
 - **WSL Support**: Cấu hình tối ưu cho môi trường WSL
 
-## 🚀 Cài đặt tự động (Khuyến nghị)
+## � Installation
 
-### Cài đặt hoàn chỉnh cho máy mới:
+### �🚀 Cài đặt tự động (Khuyến nghị)
+
+#### Cài đặt hoàn chỉnh cho máy mới:
 
 ```bash
 git clone https://github.com/nguyendb92/MyConfig.git
@@ -26,17 +28,19 @@ chmod +x auto_setup.sh
 
 **Lưu ý**: Script sẽ tự động phát hiện môi trường WSL và cấu hình phù hợp.
 
-### Cấu hình nâng cao sau khi cài đặt:
+#### Cấu hình nâng cao sau khi cài đặt:
 
-#### Cho Ubuntu thuần:
+##### Cho Ubuntu thuần:
 ```bash
 make post-setup
 ```
 
-#### Cho WSL (Windows Subsystem for Linux):
+##### Cho WSL (Windows Subsystem for Linux):
 ```bash
 make wsl-setup
 ```
+
+## 🎯 Usage
 
 ### Quản lý dịch vụ phát triển:
 
@@ -302,6 +306,11 @@ remove-logs-dry TEMP         # Preview temp log cleanup
 ## 🤝 Đóng góp
 
 Nếu bạn có suggestions hoặc improvements, hãy tạo issue hoặc pull request!
+
+## Buy Me a Coffee
+- Tiếng Việt: "Yêu thích bài viết này? Hãy mời tôi một ly cà phê nhé!"
+- Tiếng Anh: "Enjoyed this article? Buy me a coffee!"
+ ![Tặng tác giả 1 cốc cà phê](./images/MaQR.jpg "Tặng tác giả một cốc cà phê")
 
 ## 📄 License
 MIT License - Xem file docs/LICENSE để biết thêm chi tiết.

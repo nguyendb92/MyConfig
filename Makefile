@@ -1,574 +1,344 @@
 # =============================================================================
 # Makefile for MyConfig - Fullstack Developer Environment Setup
 # =============================================================================
+# Author: Nguyen DB
+# Description: Unified build automation for development environment setup
+# Version: 2.0 - Enhanced for Consistency and Usability
+# Usage: make [target] - See 'make help' for available targets
+# =============================================================================
 
-.PHONY: help install setup-vim setup-vscode install-extensions post-setup check clean
+.PHONY: help install setup-vim setup-vscode install-extensions post-setup check clean validate update backup restore dev-start dev-stop dev-status info wsl-setup wsl-check wsl-services wsl-restart update-aliases
 
-# Default target
+# Include common functions
+SHELL := /bin/bash
+
+# Color output for better UX
+BLUE := \033[34m
+GREEN := \033[32m
+YELLOW := \033[33m
+RED := \033[31m
+NC := \033[0m # No Color
+
+# Helper function to print formatted messages
+define log_info
+	@echo -e "$(BLUE)[INFO]$(NC) ℹ️  $(1)"
+endef
+
+define log_success
+	@echo -e "$(GREEN)[SUCCESS]$(NC) ✅ $(1)"
+endef
+
+define log_warning
+	@echo -e "$(YELLOW)[WARNING]$(NC) ⚠️  $(1)"
+endef
+
+define log_error
+	@echo -e "$(RED)[ERROR]$(NC) ❌ $(1)"
+endef
+
+# =============================================================================
+# PRIMARY COMMANDS - Core functionality
+# =============================================================================
+
+# Default target - Show help
 help:
-	@echo "MyConfig - Fullstack Developer Environment Setup"
+	@echo -e "$(BLUE)=== 🎯 MyConfig - Fullstack Developer Environment Setup ===$(NC)"
 	@echo ""
-	@echo "Available commands:"
-	@echo "  make install          - Full automated installation (recommended)"
-	@echo "  make wsl-setup        - WSL-specific advanced setup"
-	@echo "  make setup-vim        - Setup Vim configuration only"
-	@echo "  make setup-vscode     - Setup VS Code configuration only"
-	@echo "  make install-ext      - Install VS Code extensions only"
-	@echo "  make post-setup       - Run post-installation configuration"
-	@echo "  make update-aliases   - Update aliases with personalized namespace (NNC)"
-	@echo "  make check            - Check environment and troubleshoot"
-	@echo "  make update           - Update all tools and packages"
-	@echo "  make backup           - Backup current configurations"
-	@echo "  make restore          - Restore configurations from backup"
-	@echo "  make clean            - Clean up temporary files"
-	@echo "  make info             - Show system information"
-	@echo "  make dev-start        - Start development services"
-	@echo "  make dev-stop         - Stop development services"
-	@echo "  make validate         - Quick environment validation"
+	@echo -e "$(GREEN)📋 Core Commands:$(NC)"
+	@echo "  make install          - 🚀 Full automated installation (recommended)"
+	@echo "  make setup-vim        - ⚡ Setup Vim configuration only"
+	@echo "  make setup-vscode     - 🎨 Setup VS Code configuration only"
+	@echo "  make install-ext      - 🔌 Install VS Code extensions only"
+	@echo "  make post-setup       - ⚙️  Run post-installation configuration"
+	@echo "  make update-aliases   - 🔄 Update aliases"
 	@echo ""
-	@echo "WSL-specific commands:"
-	@echo "  make wsl-check        - Check if running in WSL"
-	@echo "  make wsl-services     - Manage WSL services"
-	@echo "  make wsl-restart      - Restart WSL (requires Windows)"
+	@echo -e "$(GREEN)🔍 Validation & Maintenance:$(NC)"
+	@echo "  make validate         - ✅ Comprehensive environment validation"
+	@echo "  make check            - 🔧 Quick environment check"
+	@echo "  make update           - 📦 Update all tools and packages"
+	@echo "  make backup           - 💾 Backup current configurations"
+	@echo "  make restore          - 🔄 Restore configurations from backup"
+	@echo "  make clean            - 🧹 Clean up temporary files"
+	@echo "  make info             - 📊 Show system information"
 	@echo ""
-	@echo "Quick start for new machine:"
-	@echo "  Ubuntu: make install && make post-setup"
-	@echo "  WSL:    make install && make wsl-setup"
+	@echo -e "$(GREEN)🚀 Development Services:$(NC)"
+	@echo "  make dev-start        - ▶️  Start development services"
+	@echo "  make dev-stop         - ⏹️  Stop development services"
+	@echo "  make dev-status       - 📋 Check services status"
+	@echo ""
+	@echo -e "$(GREEN)🐧 WSL-specific Commands:$(NC)"
+	@echo "  make wsl-setup        - 🐧 WSL-specific advanced setup"
+	@echo "  make wsl-check        - 🔍 Check if running in WSL"
+	@echo "  make wsl-services     - ⚙️  Manage WSL services"
+	@echo ""
+	@echo -e "$(GREEN)⚡ Quick Start:$(NC)"
+	@echo "  🐧 Ubuntu: make install && make post-setup"
+	@echo "  🪟 WSL:    make install && make wsl-setup"
+	@echo ""
+	@echo -e "$(GREEN)💡 Tips:$(NC)"
+	@echo "  - Use 'make validate' to check current setup"
+	@echo "  - Run 'make clean' before major updates"
+	@echo "  - Use 'make backup' before making changes"
 
-# Full installation
+# Full installation process
 install:
-	@echo "🚀 Starting full environment setup..."
-	@chmod +x auto_setup.sh
+	$(call log_info,"Starting full MyConfig installation...")
+	@chmod +x auto_setup.sh validate_setup.sh
 	@./auto_setup.sh
 
-# Vim setup only
+# =============================================================================
+# COMPONENT SETUP - Individual components
+# =============================================================================
+
+# Setup Vim configuration
 setup-vim:
-	@echo "⚡ Setting up Vim configuration..."
+	$(call log_info,"Setting up Vim configuration...")
 	@chmod +x setup_vim.sh
 	@./setup_vim.sh
-	@echo "✅ Vim setup completed. Run 'vim' and ':PlugInstall' to install plugins."
 
-# VS Code setup only
+# Setup VS Code configuration
 setup-vscode:
-	@echo "🎨 Setting up VS Code configuration..."
-	@mkdir -p ~/.config/Code/User
-	@if [ -f "vscode/settings.json" ]; then \
-		cp vscode/settings.json ~/.config/Code/User/; \
-		echo "✅ VS Code settings copied"; \
+	$(call log_info,"Setting up VS Code configuration...")
+	@if [ -d "vscode" ]; then \
+		mkdir -p ~/.config/Code/User; \
+		cp vscode/settings.json ~/.config/Code/User/ 2>/dev/null || true; \
+		cp vscode/keybindings.json ~/.config/Code/User/ 2>/dev/null || true; \
+		$(call log_success,"VS Code configuration updated"); \
 	else \
-		echo "❌ VS Code settings.json not found"; \
-	fi
-	@if [ -f "vscode/keybindings.json" ]; then \
-		cp vscode/keybindings.json ~/.config/Code/User/; \
-		echo "✅ VS Code keybindings copied"; \
-	else \
-		echo "❌ VS Code keybindings.json not found"; \
+		$(call log_error,"VS Code configuration directory not found"); \
+		exit 1; \
 	fi
 
 # Install VS Code extensions
 install-ext:
-	@echo "🔌 Installing VS Code extensions..."
+	$(call log_info,"Installing VS Code extensions...")
 	@chmod +x install_extensions.sh
 	@./install_extensions.sh
 
 # Post-installation setup
 post-setup:
-	@echo "⚙️  Running post-installation configuration..."
+	$(call log_info,"Running post-installation setup...")
 	@chmod +x post_setup.sh
 	@./post_setup.sh
 
-# Update aliases with personalized namespace
+# Update aliases
 update-aliases:
-	@echo "🔧 Updating aliases with personalized namespace (NNC)..."
+	$(call log_info,"Updating aliases...")
 	@if [ -f ".aliases.zsh" ]; then \
-		echo "📝 Backing up current aliases..."; \
 		cp ~/.aliases.zsh ~/.aliases.zsh.backup.$$(date +%Y%m%d_%H%M%S) 2>/dev/null || true; \
-		echo "🔄 Copying updated aliases..."; \
 		cp .aliases.zsh ~/; \
-		echo "🏷️  Setting up personalized namespace (NNC)..."; \
-		sed -i 's/DEBUG_NAMESPACES\./NNC_DEBUG\./g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/\[AUTH:/[NNC-AUTH:/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/\[API:/[NNC-API:/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/\[DB:/[NNC-DB:/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/\[UI:/[NNC-UI:/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/\[TEMP:/[NNC-TEMP:/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/debug-auth/nnc-debug-auth/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/debug-api/nnc-debug-api/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/debug-db/nnc-debug-db/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/debug-ui/nnc-debug-ui/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/clean-auth/nnc-clean-auth/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/clean-api/nnc-clean-api/g' ~/.aliases.zsh 2>/dev/null || true; \
-		sed -i 's/clean-db/nnc-clean-db/g' ~/.aliases.zsh 2>/dev/null || true; \
-		echo "🔄 Reloading shell configuration..."; \
-		echo "✅ Aliases updated with NNC namespace!"; \
-		echo "💡 Run 'source ~/.zshrc' or restart terminal to apply changes"; \
-		echo "🏷️  New commands: nnc-debug-auth, nnc-debug-api, nnc-debug-db, etc."; \
+		$(call log_success,"Aliases updated successfully"); \
+		echo "🔄 Reload with: source ~/.zshrc"; \
 	else \
-		echo "❌ .aliases.zsh not found in current directory"; \
+		$(call log_error,".aliases.zsh not found in current directory"); \
 		exit 1; \
 	fi
 
-# Check environment
+# =============================================================================
+# VALIDATION & MAINTENANCE - System checking and maintenance
+# =============================================================================
+
+# Comprehensive validation
+validate:
+	$(call log_info,"Running comprehensive validation...")
+	@chmod +x validate_standalone.sh
+	@./validate_standalone.sh
+
+# Quick environment check
 check:
-	@echo "🔍 Checking development environment..."
+	$(call log_info,"Running quick environment check...")
 	@chmod +x check_environment.sh
 	@./check_environment.sh
 
 # Update system and tools
 update:
-	@echo "🔄 Updating system and development tools..."
+	$(call log_info,"Updating system and tools...")
 	@sudo apt update && sudo apt upgrade -y
-	@if command -v npm >/dev/null 2>&1; then \
-		echo "Updating npm packages..."; \
-		npm update -g; \
+	@if command -v npm >/dev/null 2>&1; then sudo npm update -g; fi
+	@if command -v pip3 >/dev/null 2>&1; then pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U 2>/dev/null || true; fi
+	$(call log_success,"System update completed")
+
+# System information
+info:
+	$(call log_info,"Gathering system information...")
+	@echo -e "$(BLUE)🖥️  System Information$(NC)"
+	@echo "══════════════════════"
+	@echo "OS: $$(lsb_release -d 2>/dev/null | cut -f2 || echo 'Unknown')"
+	@echo "Kernel: $$(uname -r)"
+	@echo "Architecture: $$(uname -m)"
+	@echo "Shell: $$SHELL"
+	@echo "User: $$USER"
+	@echo "Home: $$HOME"
+	@echo ""
+	@echo -e "$(BLUE)💾 Memory & Storage$(NC)"
+	@echo "══════════════════════"
+	@echo "Memory: $$(free -h | awk '/^Mem:/ {print $$3 "/" $$2}')"
+	@echo "Disk: $$(df -h / | awk 'NR==2 {print $$3 "/" $$2 " (" $$5 " used)"}')"
+	@echo ""
+	@echo -e "$(BLUE)🔧 Development Tools$(NC)"
+	@echo "══════════════════════"
+	@if command -v git >/dev/null 2>&1; then echo "Git: $$(git --version | cut -d' ' -f3)"; else echo "Git: Not installed"; fi
+	@if command -v node >/dev/null 2>&1; then echo "Node.js: $$(node --version)"; else echo "Node.js: Not installed"; fi
+	@if command -v python3 >/dev/null 2>&1; then echo "Python3: $$(python3 --version | cut -d' ' -f2)"; else echo "Python3: Not installed"; fi
+	@if command -v docker >/dev/null 2>&1; then echo "Docker: $$(docker --version | cut -d' ' -f3 | tr -d ',')"; else echo "Docker: Not installed"; fi
+	@if command -v code >/dev/null 2>&1; then echo "VS Code: $$(code --version | head -n1)"; else echo "VS Code: Not installed"; fi
+
+# =============================================================================
+# DEVELOPMENT SERVICES - Service management
+# =============================================================================
+
+# Start development services
+dev-start:
+	$(call log_info,"Starting development services...")
+	@echo "🔧 Checking environment..."
+	@if [ -f /proc/version ] && grep -qi "microsoft\|wsl" /proc/version; then \
+		echo "🐧 WSL Environment detected"; \
+		sudo service mysql start 2>/dev/null || true; \
+		sudo service postgresql start 2>/dev/null || true; \
+		sudo service redis-server start 2>/dev/null || true; \
+	else \
+		echo "🐧 Native Ubuntu detected"; \
+		sudo systemctl start mysql 2>/dev/null || true; \
+		sudo systemctl start postgresql 2>/dev/null || true; \
+		sudo systemctl start redis-server 2>/dev/null || true; \
 	fi
-	@if command -v pip3 >/dev/null 2>&1; then \
-		echo "Updating pip packages..."; \
-		pip3 install --upgrade --user pip setuptools wheel; \
+	@if command -v docker >/dev/null 2>&1; then \
+		sudo systemctl start docker 2>/dev/null || sudo service docker start 2>/dev/null || true; \
 	fi
-	@if command -v code >/dev/null 2>&1; then \
-		echo "Updating VS Code extensions..."; \
-		code --update-extensions; \
+	$(call log_success,"Development services started")
+
+# Stop development services
+dev-stop:
+	$(call log_info,"Stopping development services...")
+	@if [ -f /proc/version ] && grep -qi "microsoft\|wsl" /proc/version; then \
+		sudo service mysql stop 2>/dev/null || true; \
+		sudo service postgresql stop 2>/dev/null || true; \
+		sudo service redis-server stop 2>/dev/null || true; \
+	else \
+		sudo systemctl stop mysql 2>/dev/null || true; \
+		sudo systemctl stop postgresql 2>/dev/null || true; \
+		sudo systemctl stop redis-server 2>/dev/null || true; \
 	fi
-	@echo "✅ Update completed"
+	@if command -v docker >/dev/null 2>&1; then \
+		sudo systemctl stop docker 2>/dev/null || sudo service docker stop 2>/dev/null || true; \
+	fi
+	$(call log_success,"Development services stopped")
+
+# Check development services status
+dev-status:
+	$(call log_info,"Checking development services status...")
+	@echo "🔧 Service Status:"
+	@if [ -f /proc/version ] && grep -qi "microsoft\|wsl" /proc/version; then \
+		echo -n "  MySQL: "; sudo service mysql status >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+		echo -n "  PostgreSQL: "; sudo service postgresql status >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+		echo -n "  Redis: "; sudo service redis-server status >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+	else \
+		echo -n "  MySQL: "; systemctl is-active mysql >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+		echo -n "  PostgreSQL: "; systemctl is-active postgresql >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+		echo -n "  Redis: "; systemctl is-active redis-server >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+	fi
+	@if command -v docker >/dev/null 2>&1; then \
+		echo -n "  Docker: "; docker ps >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+	fi
+
+# =============================================================================
+# WSL-SPECIFIC COMMANDS - Windows Subsystem for Linux
+# =============================================================================
+
+# WSL advanced setup
+wsl-setup:
+	$(call log_info,"Running WSL-specific setup...")
+	@chmod +x wsl_advanced_setup.sh
+	@./wsl_advanced_setup.sh
+
+# Check if running in WSL
+wsl-check:
+	@if [ -f /proc/version ] && grep -qi "microsoft\|wsl" /proc/version; then \
+		echo -e "$(GREEN)✅ Running in WSL environment$(NC)"; \
+		echo "WSL Version: $$(cat /proc/version | grep -oP 'WSL\d?' 2>/dev/null || echo 'WSL 1')"; \
+	else \
+		echo -e "$(YELLOW)⚠️  Not running in WSL$(NC)"; \
+	fi
+
+# WSL service management
+wsl-services:
+	$(call log_info,"Managing WSL services...")
+	@if [ -f /proc/version ] && grep -qi "microsoft\|wsl" /proc/version; then \
+		echo "🔧 WSL Service Status:"; \
+		echo -n "  SSH: "; sudo service ssh status >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+		echo -n "  MySQL: "; sudo service mysql status >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+		echo -n "  PostgreSQL: "; sudo service postgresql status >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+		echo -n "  Redis: "; sudo service redis-server status >/dev/null 2>&1 && echo -e "$(GREEN)✅ Running$(NC)" || echo -e "$(RED)❌ Stopped$(NC)"; \
+	else \
+		$(call log_warning,"Not in WSL environment"); \
+	fi
+
+# =============================================================================
+# BACKUP & RESTORE - Configuration management
+# =============================================================================
 
 # Backup configurations
 backup:
-	@echo "💾 Creating backup of current configurations..."
-	@mkdir -p backups/$(shell date +%Y%m%d_%H%M%S)
-	@BACKUP_DIR=backups/$(shell date +%Y%m%d_%H%M%S); \
-	if [ -f ~/.vimrc ]; then cp ~/.vimrc $$BACKUP_DIR/; fi; \
-	if [ -f ~/.zshrc ]; then cp ~/.zshrc $$BACKUP_DIR/; fi; \
-	if [ -f ~/.aliases.zsh ]; then cp ~/.aliases.zsh $$BACKUP_DIR/; fi; \
-	if [ -f ~/.config/Code/User/settings.json ]; then \
-		mkdir -p $$BACKUP_DIR/vscode; \
-		cp ~/.config/Code/User/settings.json $$BACKUP_DIR/vscode/; \
-	fi; \
-	if [ -f ~/.config/Code/User/keybindings.json ]; then \
-		mkdir -p $$BACKUP_DIR/vscode; \
-		cp ~/.config/Code/User/keybindings.json $$BACKUP_DIR/vscode/; \
-	fi; \
-	echo "✅ Backup created in $$BACKUP_DIR"
+	$(call log_info,"Creating backup of configurations...")
+	@mkdir -p ~/.myconfig/backups
+	@backup_date=$$(date +%Y%m%d_%H%M%S); \
+	backup_dir="$$HOME/.myconfig/backups/myconfig_backup_$$backup_date"; \
+	mkdir -p "$$backup_dir"; \
+	echo "📦 Creating backup in: $$backup_dir"; \
+	cp ~/.vimrc "$$backup_dir/" 2>/dev/null || true; \
+	cp ~/.zshrc "$$backup_dir/" 2>/dev/null || true; \
+	cp ~/.aliases.zsh "$$backup_dir/" 2>/dev/null || true; \
+	cp -r ~/.config/Code/User "$$backup_dir/vscode" 2>/dev/null || true; \
+	cp ~/.ssh/config "$$backup_dir/" 2>/dev/null || true; \
+	echo "$$backup_date" > "$$backup_dir/backup_info.txt"; \
+	echo "MyConfig backup created on: $$(date)" >> "$$backup_dir/backup_info.txt"; \
+	$(call log_success,"Backup created: $$backup_dir")
 
-# Restore from latest backup
+# Restore configurations
 restore:
-	@echo "🔄 Restoring configurations from latest backup..."
-	@LATEST_BACKUP=$$(ls -1t backups/ | head -1); \
-	if [ -z "$$LATEST_BACKUP" ]; then \
-		echo "❌ No backup found"; \
-		exit 1; \
-	fi; \
-	echo "Restoring from $$LATEST_BACKUP..."; \
-	if [ -f "backups/$$LATEST_BACKUP/vimrc" ]; then \
-		cp "backups/$$LATEST_BACKUP/vimrc" ~/.vimrc; \
-	fi; \
-	if [ -f "backups/$$LATEST_BACKUP/zshrc" ]; then \
-		cp "backups/$$LATEST_BACKUP/zshrc" ~/.zshrc; \
-	fi; \
-	if [ -f "backups/$$LATEST_BACKUP/aliases.zsh" ]; then \
-		cp "backups/$$LATEST_BACKUP/aliases.zsh" ~/.aliases.zsh; \
-	fi; \
-	if [ -f "backups/$$LATEST_BACKUP/vscode/settings.json" ]; then \
-		mkdir -p ~/.config/Code/User; \
-		cp "backups/$$LATEST_BACKUP/vscode/settings.json" ~/.config/Code/User/; \
-	fi; \
-	if [ -f "backups/$$LATEST_BACKUP/vscode/keybindings.json" ]; then \
-		mkdir -p ~/.config/Code/User; \
-		cp "backups/$$LATEST_BACKUP/vscode/keybindings.json" ~/.config/Code/User/; \
-	fi; \
-	echo "✅ Restore completed from $$LATEST_BACKUP"
-
-# Clean up
-clean:
-	@echo "🧹 Cleaning up temporary files..."
-	@rm -f *.log
-	@rm -f /tmp/myconfig_*
-	@sudo apt autoremove -y
-	@sudo apt autoclean
-	@if command -v docker >/dev/null 2>&1; then \
-		docker system prune -f; \
-	fi
-	@echo "✅ Cleanup completed"
-
-# Show system information
-info:
-	@echo "📊 System Information:"
-	@echo "OS: $$(lsb_release -d | cut -f2 2>/dev/null || echo 'Unknown')"
-	@echo "Kernel: $$(uname -r)"
-	@echo "Architecture: $$(uname -m)"
-	@echo "Shell: $$SHELL"
-	@echo "User: $$USER"
-	@echo ""
-	@echo "📦 Development Tools:"
-	@echo "Node.js: $$(node --version 2>/dev/null || echo 'Not installed')"
-	@echo "Python: $$(python3 --version 2>/dev/null || echo 'Not installed')"
-	@echo "Git: $$(git --version 2>/dev/null || echo 'Not installed')"
-	@echo "Docker: $$(docker --version 2>/dev/null || echo 'Not installed')"
-	@echo "VS Code: $$(code --version 2>/dev/null | head -1 || echo 'Not installed')"
-
-# Development shortcuts
-dev-start:
-	@echo "🚀 Starting development services..."
-	@if systemctl list-unit-files | grep -q mysql; then \
-		sudo systemctl start mysql; \
-		echo "✅ MySQL started"; \
-	fi
-	@if systemctl list-unit-files | grep -q postgresql; then \
-		sudo systemctl start postgresql; \
-		echo "✅ PostgreSQL started"; \
-	fi
-	@if systemctl list-unit-files | grep -q redis-server; then \
-		sudo systemctl start redis-server; \
-		echo "✅ Redis started"; \
-	fi
-	@if systemctl list-unit-files | grep -q docker; then \
-		sudo systemctl start docker; \
-		echo "✅ Docker started"; \
-	fi
-
-dev-stop:
-	@echo "🛑 Stopping development services..."
-	@if systemctl list-unit-files | grep -q mysql; then \
-		sudo systemctl stop mysql; \
-		echo "✅ MySQL stopped"; \
-	fi
-	@if systemctl list-unit-files | grep -q postgresql; then \
-		sudo systemctl stop postgresql; \
-		echo "✅ PostgreSQL stopped"; \
-	fi
-	@if systemctl list-unit-files | grep -q redis-server; then \
-		sudo systemctl stop redis-server; \
-		echo "✅ Redis stopped"; \
-	fi
-
-# Quick project creation
-# Create new project shortcuts
-create-react:
-	@read -p "Enter project name: " name; \
-	if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "🚀 Creating React project in WSL environment..."; \
-		mkdir -p ~/Projects/frontend && cd ~/Projects/frontend && npx create-react-app $$name && cd $$name && code .; \
-	else \
-		echo "🚀 Creating React project..."; \
-		cd ~/Projects/frontend && npx create-react-app $$name && cd $$name && code .; \
-	fi
-
-create-vue:
-	@read -p "Enter project name: " name; \
-	if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "🚀 Creating Vue project in WSL environment..."; \
-		mkdir -p ~/Projects/frontend && cd ~/Projects/frontend && npm create vue@latest $$name && cd $$name && code .; \
-	else \
-		echo "🚀 Creating Vue project..."; \
-		cd ~/Projects/frontend && npm create vue@latest $$name && cd $$name && code .; \
-	fi
-
-create-node:
-	@read -p "Enter project name: " name; \
-	if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "🚀 Creating Node.js project in WSL environment..."; \
-		mkdir -p ~/Projects/backend && cd ~/Projects/backend && mkdir $$name && cd $$name && npm init -y && echo "node_modules/\n.env\n*.log" > .gitignore && code .; \
-	else \
-		echo "🚀 Creating Node.js project..."; \
-		cd ~/Projects/backend && mkdir $$name && cd $$name && npm init -y && echo "node_modules/\n.env\n*.log" > .gitignore && code .; \
-	fi
-
-create-python:
-	@read -p "Enter project name: " name; \
-	if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "🚀 Creating Python project in WSL environment..."; \
-		mkdir -p ~/Projects/backend && cd ~/Projects/backend && mkdir $$name && cd $$name && python3 -m venv .venv && echo ".venv/\n*.pyc\n__pycache__/\n.env" > .gitignore && touch requirements.txt && code .; \
-	else \
-		echo "🚀 Creating Python project..."; \
-		cd ~/Projects/backend && mkdir $$name && cd $$name && python3 -m venv .venv && echo ".venv/\n*.pyc\n__pycache__/\n.env" > .gitignore && touch requirements.txt && code .; \
-	fi
-
-# WSL-specific targets
-wsl-check:
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "✅ Running in WSL environment"; \
-		echo "Distribution: $$(lsb_release -d | cut -f2 2>/dev/null || echo 'Unknown')"; \
-		echo "Kernel: $$(uname -r)"; \
-		echo "WSL Version: $$(cat /proc/version | grep -oP 'WSL\d?' 2>/dev/null || echo 'WSL 1')"; \
-	else \
-		echo "❌ Not running in WSL environment"; \
-		echo "This is a native Ubuntu installation"; \
-	fi
-
-wsl-setup:
-	@echo "🔧 Setting up WSL-specific configuration..."
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		chmod +x wsl_advanced_setup.sh; \
-		./wsl_advanced_setup.sh; \
-	else \
-		echo "❌ This command is only for WSL environments"; \
-		exit 1; \
-	fi
-
-wsl-services:
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "🔍 Checking WSL services status..."; \
-		echo "MySQL: $$(sudo service mysql status 2>/dev/null | grep -o 'Active: [^)]*' || echo 'Not installed')"; \
-		echo "PostgreSQL: $$(sudo service postgresql status 2>/dev/null | grep -o 'Active: [^)]*' || echo 'Not installed')"; \
-		echo "Redis: $$(sudo service redis-server status 2>/dev/null | grep -o 'Active: [^)]*' || echo 'Not installed')"; \
+	$(call log_info,"Restoring configurations from backup...")
+	@if [ -z "$(BACKUP)" ]; then \
+		echo -e "$(YELLOW)Available backups:$(NC)"; \
+		ls -la ~/.myconfig/backups/ 2>/dev/null | grep "myconfig_backup" || echo "No backups found"; \
 		echo ""; \
-		echo "💡 WSL Service Commands:"; \
-		echo "  Start all: sudo service mysql start && sudo service postgresql start && sudo service redis-server start"; \
-		echo "  Stop all:  sudo service mysql stop && sudo service postgresql stop && sudo service redis-server stop"; \
+		echo "Usage: make restore BACKUP=myconfig_backup_YYYYMMDD_HHMMSS"; \
+		exit 1; \
+	fi
+	@backup_dir="$$HOME/.myconfig/backups/$(BACKUP)"; \
+	if [ -d "$$backup_dir" ]; then \
+		echo "🔄 Restoring from: $$backup_dir"; \
+		cp "$$backup_dir/.vimrc" ~/ 2>/dev/null || true; \
+		cp "$$backup_dir/.zshrc" ~/ 2>/dev/null || true; \
+		cp "$$backup_dir/.aliases.zsh" ~/ 2>/dev/null || true; \
+		mkdir -p ~/.config/Code/User; \
+		cp -r "$$backup_dir/vscode/"* ~/.config/Code/User/ 2>/dev/null || true; \
+		cp "$$backup_dir/config" ~/.ssh/ 2>/dev/null || true; \
+		$(call log_success,"Configuration restored from backup"); \
 	else \
-		echo "❌ This command is only for WSL environments"; \
+		$(call log_error,"Backup directory not found: $$backup_dir"); \
+		exit 1; \
 	fi
 
-wsl-restart:
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "🔄 Restarting WSL..."; \
-		echo "Run this command from Windows PowerShell/CMD: wsl --shutdown"; \
-		echo "Then reopen your WSL terminal"; \
-	else \
-		echo "❌ This command is only for WSL environments"; \
-	fi
+# =============================================================================
+# MAINTENANCE - Cleanup and utilities
+# =============================================================================
 
-# Development service management
-dev-start:
-	@echo "🚀 Starting development services..."
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "WSL environment detected - starting services..."; \
-		sudo service mysql start 2>/dev/null && echo "✅ MySQL started" || echo "❌ MySQL failed to start"; \
-		sudo service postgresql start 2>/dev/null && echo "✅ PostgreSQL started" || echo "❌ PostgreSQL failed to start"; \
-		sudo service redis-server start 2>/dev/null && echo "✅ Redis started" || echo "❌ Redis failed to start"; \
-	else \
-		echo "Native Ubuntu detected - starting services..."; \
-		sudo systemctl start mysql 2>/dev/null && echo "✅ MySQL started" || echo "❌ MySQL failed to start"; \
-		sudo systemctl start postgresql 2>/dev/null && echo "✅ PostgreSQL started" || echo "❌ PostgreSQL failed to start"; \
-		sudo systemctl start redis-server 2>/dev/null && echo "✅ Redis started" || echo "❌ Redis failed to start"; \
-	fi
-	@echo "🎉 Development services startup completed!"
-
-dev-stop:
-	@echo "🛑 Stopping development services..."
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "WSL environment detected - stopping services..."; \
-		sudo service mysql stop 2>/dev/null && echo "✅ MySQL stopped" || echo "❌ MySQL failed to stop"; \
-		sudo service postgresql stop 2>/dev/null && echo "✅ PostgreSQL stopped" || echo "❌ PostgreSQL failed to stop"; \
-		sudo service redis-server stop 2>/dev/null && echo "✅ Redis stopped" || echo "❌ Redis failed to stop"; \
-	else \
-		echo "Native Ubuntu detected - stopping services..."; \
-		sudo systemctl stop mysql 2>/dev/null && echo "✅ MySQL stopped" || echo "❌ MySQL failed to stop"; \
-		sudo systemctl stop postgresql 2>/dev/null && echo "✅ PostgreSQL stopped" || echo "❌ PostgreSQL failed to stop"; \
-		sudo systemctl stop redis-server 2>/dev/null && echo "✅ Redis stopped" || echo "❌ Redis failed to stop"; \
-	fi
-	@echo "🎉 Development services stopped!"
-
-dev-status:
-	@echo "📊 Checking development services status..."
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "WSL environment detected:"; \
-		echo "MySQL: $$(sudo service mysql status 2>/dev/null | grep -o 'Active: [^)]*' || echo 'Not running')"; \
-		echo "PostgreSQL: $$(sudo service postgresql status 2>/dev/null | grep -o 'Active: [^)]*' || echo 'Not running')"; \
-		echo "Redis: $$(sudo service redis-server status 2>/dev/null | grep -o 'Active: [^)]*' || echo 'Not running')"; \
-	else \
-		echo "Native Ubuntu detected:"; \
-		echo "MySQL: $$(sudo systemctl is-active mysql 2>/dev/null || echo 'Not running')"; \
-		echo "PostgreSQL: $$(sudo systemctl is-active postgresql 2>/dev/null || echo 'Not running')"; \
-		echo "Redis: $$(sudo systemctl is-active redis-server 2>/dev/null || echo 'Not running')"; \
-	fi
-
-# Enhanced system information
-info:
-	@echo "🖥️  System Information"
-	@echo "====================="
-	@echo "OS: $$(lsb_release -d | cut -f2 2>/dev/null || echo 'Unknown')"
-	@echo "Kernel: $$(uname -r)"
-	@echo "Architecture: $$(uname -m)"
-	@echo "CPU Cores: $$(nproc)"
-	@echo "Memory: $$(free -h | awk '/^Mem:/ {print $$2}') total"
-	@echo "Disk: $$(df -h / | awk 'NR==2 {print $$4}') free"
-	@echo "Shell: $$SHELL"
-	@echo "User: $$USER"
-	@if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then \
-		echo "Environment: WSL ($$(cat /proc/version | grep -oP 'WSL\d?' 2>/dev/null || echo 'WSL 1'))"; \
-	else \
-		echo "Environment: Native Ubuntu"; \
-	fi
-	@echo ""
-	@echo "🛠️  Development Tools"
-	@echo "===================="
-	@echo "Git: $$(git --version 2>/dev/null || echo 'Not installed')"
-	@echo "Node.js: $$(node --version 2>/dev/null || echo 'Not installed')"
-	@echo "npm: $$(npm --version 2>/dev/null || echo 'Not installed')"
-	@echo "Python: $$(python3 --version 2>/dev/null || echo 'Not installed')"
-	@echo "Docker: $$(docker --version 2>/dev/null || echo 'Not installed')"
-	@echo "VS Code: $$(code --version 2>/dev/null | head -1 || echo 'Not installed')"
-
-# Maintenance and cleanup
-maintenance:
-	@echo "🧹 Running system maintenance..."
-	@echo "Updating package lists..."
-	@sudo apt update
-	@echo "Upgrading packages..."
-	@sudo apt upgrade -y
-	@echo "Cleaning up packages..."
-	@sudo apt autoremove -y
-	@sudo apt autoclean
-	@if command -v npm >/dev/null 2>&1; then \
-		echo "Cleaning npm cache..."; \
-		npm cache clean --force 2>/dev/null || true; \
-	fi
-	@if command -v pip3 >/dev/null 2>&1; then \
-		echo "Cleaning pip cache..."; \
-		pip3 cache purge 2>/dev/null || true; \
-	fi
+# Clean up temporary files
+clean:
+	$(call log_info,"Cleaning up temporary files...")
+	@rm -f *.log *.tmp ~/.myconfig/logs/*.log 2>/dev/null || true
+	@find . -name "*.backup_*" -type f -mtime +30 -delete 2>/dev/null || true
 	@if command -v docker >/dev/null 2>&1; then \
-		echo "Cleaning Docker..."; \
-		docker system prune -f 2>/dev/null || true; \
+		docker system prune -f >/dev/null 2>&1 || true; \
 	fi
-	@echo "✅ Maintenance completed!"
-
-# Enhanced backup functionality
-backup:
-	@echo "📦 Creating configuration backup..."
-	@mkdir -p ~/Backups/MyConfig_$$(date +%Y%m%d_%H%M%S)
-	@BACKUP_DIR=~/Backups/MyConfig_$$(date +%Y%m%d_%H%M%S); \
-	cp ~/.vimrc $$BACKUP_DIR/ 2>/dev/null || true; \
-	cp ~/.zshrc $$BACKUP_DIR/ 2>/dev/null || true; \
-	cp ~/.aliases.zsh $$BACKUP_DIR/ 2>/dev/null || true; \
-	cp ~/.wsl_dev_aliases.zsh $$BACKUP_DIR/ 2>/dev/null || true; \
-	mkdir -p $$BACKUP_DIR/vscode 2>/dev/null || true; \
-	cp ~/.config/Code/User/settings.json $$BACKUP_DIR/vscode/ 2>/dev/null || true; \
-	cp ~/.config/Code/User/keybindings.json $$BACKUP_DIR/vscode/ 2>/dev/null || true; \
-	echo "✅ Backup created at: $$BACKUP_DIR"
-
-restore:
-	@echo "🔄 Available backups:"
-	@ls -la ~/Backups/ 2>/dev/null || (echo "❌ No backups found" && exit 1)
-	@read -p "Enter backup folder name: " backup; \
-	if [ -d ~/Backups/$$backup ]; then \
-		echo "Restoring from $$backup..."; \
-		cp ~/Backups/$$backup/.vimrc ~/ 2>/dev/null || true; \
-		cp ~/Backups/$$backup/.zshrc ~/ 2>/dev/null || true; \
-		cp ~/Backups/$$backup/.aliases.zsh ~/ 2>/dev/null || true; \
-		cp ~/Backups/$$backup/.wsl_dev_aliases.zsh ~/ 2>/dev/null || true; \
-		cp ~/Backups/$$backup/vscode/settings.json ~/.config/Code/User/ 2>/dev/null || true; \
-		cp ~/Backups/$$backup/vscode/keybindings.json ~/.config/Code/User/ 2>/dev/null || true; \
-		echo "✅ Restore completed from $$backup"; \
-	else \
-		echo "❌ Backup folder not found"; \
+	@if command -v npm >/dev/null 2>&1; then \
+		npm cache clean --force >/dev/null 2>&1 || true; \
 	fi
+	$(call log_success,"Cleanup completed")
 
-# Quick environment validation
-validate:
-	@echo "🔍 Running quick environment validation..."
-	@chmod +x validate_setup.sh
-	@./validate_setup.sh
-
-# Debug log cleanup commands
-debug-help:
-	@echo "🐛 Debug Log Cleanup Commands:"
-	@echo ""
-	@echo "Available debug cleanup targets:"
-	@echo "  make debug-list               - Show available namespaces"
-	@echo "  make debug-dry NS=<namespace> - Preview log removal (dry run)"
-	@echo "  make debug-clean NS=<namespace> - Remove logs with namespace"
-	@echo "  make debug-find NS=<namespace> - Find all logs with namespace"
-	@echo "  make debug-count              - Count logs by namespace"
-	@echo "  make debug-temp-clean         - Clean all TEMP-DEBUG logs"
-	@echo "  make debug-restore            - Restore from backup files"
-	@echo "  make debug-remove-backups     - Remove all backup files"
-	@echo ""
-	@echo "Python-specific commands:"
-	@echo "  make py-debug-dry NS=<namespace> - Preview Python log removal"
-	@echo "  make py-debug-clean NS=<namespace> - Remove Python logs"
-	@echo ""
-	@echo "Examples:"
-	@echo "  make debug-dry NS=TEMP-DEBUG  - Preview TEMP-DEBUG removal"
-	@echo "  make debug-clean NS=API-DEBUG - Remove API-DEBUG logs"
-	@echo "  make debug-count              - Show statistics"
-
-debug-list:
-	@echo "📋 Available Debug Namespaces:"
-	@./scripts/cleanup-debug-logs.sh list
-
-debug-dry:
-	@if [ -z "$(NS)" ]; then \
-		echo "❌ Please specify namespace: make debug-dry NS=TEMP-DEBUG"; \
-		./scripts/cleanup-debug-logs.sh list; \
-	else \
-		./scripts/cleanup-debug-logs.sh dry-run $(NS); \
-	fi
-
-debug-clean:
-	@if [ -z "$(NS)" ]; then \
-		echo "❌ Please specify namespace: make debug-clean NS=TEMP-DEBUG"; \
-		./scripts/cleanup-debug-logs.sh list; \
-	else \
-		./scripts/cleanup-debug-logs.sh cleanup $(NS); \
-	fi
-
-debug-find:
-	@if [ -z "$(NS)" ]; then \
-		echo "❌ Please specify namespace: make debug-find NS=API-DEBUG"; \
-	else \
-		echo "🔍 Finding all [$(NS)] logs..."; \
-		find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" \) ! -path "*/node_modules/*" ! -path "*/dist/*" -exec grep -Hn "\[$(NS)\]" {} \; 2>/dev/null || true; \
-		find . -type f -name "*.py" ! -path "*/venv/*" ! -path "*/__pycache__/*" -exec grep -Hn "\[$(NS)\]" {} \; 2>/dev/null || true; \
-	fi
-
-debug-count:
-	@echo "📊 Debug log statistics:"
-	@echo ""
-	@for ns in API-DEBUG UI-DEBUG AUTH-DEBUG DB-DEBUG PERF-DEBUG TEMP-DEBUG; do \
-		js_count=$$(find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" \) ! -path "*/node_modules/*" ! -path "*/dist/*" -exec grep -c "\[$$ns\]" {} \; 2>/dev/null | awk '{sum+=$$1} END {print sum+0}'); \
-		py_count=$$(find . -type f -name "*.py" ! -path "*/venv/*" ! -path "*/__pycache__/*" -exec grep -c "\[$$ns\]" {} \; 2>/dev/null | awk '{sum+=$$1} END {print sum+0}'); \
-		echo "[$$ns]: JS/TS: $$js_count, Python: $$py_count"; \
-	done
-
-debug-temp-clean:
-	@echo "🧹 Cleaning all TEMP-DEBUG logs..."
-	@echo "📄 Files that will be affected:"
-	@find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" -o -name "*.py" \) ! -path "*/node_modules/*" ! -path "*/venv/*" ! -path "*/dist/*" -exec grep -l "\[TEMP-DEBUG\]" {} \; 2>/dev/null || echo "No TEMP-DEBUG logs found"
-	@echo ""
-	@read -p "Proceed with cleanup? (y/N): " choice; \
-	if [ "$$choice" = "y" ] || [ "$$choice" = "Y" ]; then \
-		find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" -o -name "*.py" \) ! -path "*/node_modules/*" ! -path "*/venv/*" ! -path "*/dist/*" -exec sed -i.backup '/\[TEMP-DEBUG\]/d' {} \; 2>/dev/null; \
-		echo "✅ TEMP-DEBUG logs removed!"; \
-		echo "💡 Backup files created with .backup extension"; \
-	else \
-		echo "ℹ️  Cleanup cancelled"; \
-	fi
-
-debug-restore:
-	@./scripts/cleanup-debug-logs.sh restore
-
-debug-remove-backups:
-	@echo "🗑️  Removing debug cleanup backup files..."
-	@backup_count=$$(find . -name "*.backup" -o -name "*.py.backup" | wc -l); \
-	if [ "$$backup_count" -gt 0 ]; then \
-		echo "Found $$backup_count backup files"; \
-		read -p "Remove all backup files? (y/N): " choice; \
-		if [ "$$choice" = "y" ] || [ "$$choice" = "Y" ]; then \
-			find . -name "*.backup" -delete; \
-			find . -name "*.py.backup" -delete; \
-			echo "✅ All backup files removed!"; \
-		else \
-			echo "ℹ️  Backup cleanup cancelled"; \
-		fi; \
-	else \
-		echo "✅ No backup files found!"; \
-	fi
-
-# Python debug cleanup
-py-debug-dry:
-	@if [ -z "$(NS)" ]; then \
-		echo "❌ Please specify namespace: make py-debug-dry NS=TEMP-DEBUG"; \
-		./scripts/cleanup-python-debug.sh list; \
-	else \
-		./scripts/cleanup-python-debug.sh dry-run $(NS); \
-	fi
-
-py-debug-clean:
-	@if [ -z "$(NS)" ]; then \
-		echo "❌ Please specify namespace: make py-debug-clean NS=TEMP-DEBUG"; \
-		./scripts/cleanup-python-debug.sh list; \
-	else \
-		./scripts/cleanup-python-debug.sh cleanup $(NS); \
-	fi
+# Show version info
+version:
+	@echo -e "$(BLUE)MyConfig Version 2.0$(NC)"
+	@echo "Enhanced for Consistency and Usability"
+	@echo "Author: Nguyen DB"
+	@echo "Last Updated: $$(date)"

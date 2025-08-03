@@ -9,15 +9,11 @@ Hệ thống namespace debugging giúp fullstack developers quản lý và dọn
 ### Namespace Convention
 ```
 [NAMESPACE:LEVEL] Message
-[NNC-NAMESPACE:LEVEL] Message (Personalized version)
 ```
 
 **Ví dụ:**
 - `[AUTH:ERROR]` - Authentication errors (generic)
-- `[NNC-AUTH:ERROR]` - Authentication errors (personalized)
 - `[API:DEBUG]` - API debugging (generic) 
-- `[NNC-API:DEBUG]` - API debugging (personalized)
-- `[NNC-TEMP:INFO]` - Temporary info logs (personalized)
 
 ## 🔧 Implementation
 
@@ -68,16 +64,12 @@ const createLogger = (namespace) => ({
 // Usage
 const log = {
     auth: createLogger('AUTH'),        // Generic
-    nnc_auth: createLogger('NNC-AUTH'), // Personalized
     api: createLogger('API'),          // Generic
-    nnc_api: createLogger('NNC-API'),   // Personalized
     db: createLogger('DB'),
     ui: createLogger('UI'),
 };
 
 log.auth.error('Invalid credentials');
-log.nnc_auth.error('NNC: Invalid credentials');  // Personalized
-log.nnc_api.debug('NNC: Response data:', data);  // Personalized
 ```
 ```
 
@@ -144,79 +136,6 @@ log = {
 log['auth']['error']('Invalid credentials')
 log['db']['info']('Query executed successfully')
 log['api']['debug']('Response data:', data)
-```
-
-## 🏷️ Personalized Namespaces (NNC)
-
-### NNC Namespace System
-MyConfig hỗ trợ personalized namespaces với prefix "NNC" (có thể customize theo tên bạn):
-
-#### Available NNC Namespaces:
-- `NNC-AUTH` - Authentication & Authorization
-- `NNC-API` - API calls and responses  
-- `NNC-DB` - Database operations
-- `NNC-UI` - User Interface components
-- `NNC-TEMP` - Temporary debugging
-- `NNC-PERF` - Performance monitoring
-- `NNC-CACHE` - Caching operations
-- `NNC-QUEUE` - Queue operations
-- `NNC-DEPLOY` - Deployment processes
-- `NNC-TEST` - Testing & QA
-
-#### NNC Usage Examples:
-```javascript
-// JavaScript/TypeScript
-const nncLog = {
-    auth: (msg, data) => console.log(`[NNC-AUTH:DEBUG] ${msg}`, data),
-    api: (msg, data) => console.log(`[NNC-API:INFO] ${msg}`, data),
-    temp: (msg, data) => console.log(`[NNC-TEMP:DEBUG] ${msg}`, data)
-};
-
-nncLog.auth('User login attempt', { userId: 123 });
-nncLog.api('API response received', responseData);
-nncLog.temp('Temporary debug info', debugData);
-```
-
-```python
-# Python
-class NNCLogger:
-    @staticmethod
-    def auth_debug(msg, *args):
-        print(f"[NNC-AUTH:DEBUG] {msg}", *args)
-    
-    @staticmethod  
-    def api_info(msg, *args):
-        print(f"[NNC-API:INFO] {msg}", *args)
-        
-    @staticmethod
-    def temp_debug(msg, *args):
-        print(f"[NNC-TEMP:DEBUG] {msg}", *args)
-
-# Usage
-NNCLogger.auth_debug('Processing login', user_data)
-NNCLogger.api_info('Database query completed', result_count)
-NNCLogger.temp_debug('Temporary debug point', variable_value)
-```
-
-### NNC Quick Commands:
-```bash
-# View all NNC namespaces
-nnc-namespaces
-
-# Find specific NNC logs
-nnc-debug-auth      # Find NNC-AUTH logs
-nnc-debug-api       # Find NNC-API logs
-nnc-debug-temp      # Find NNC-TEMP logs
-
-# Clean up NNC logs
-nnc-clean-auth      # Preview NNC-AUTH cleanup
-nnc-clean-all       # Preview all NNC cleanup
-
-# Project analysis
-nnc-project-debug   # Analyze NNC logs in current project
-
-# Get help
-nnc-help           # Show NNC-specific help
 ```
 
 ## 🗂️ Common Namespaces
@@ -441,26 +360,15 @@ Các functions này sẽ được tự động thêm vào `.aliases.zsh` khi ch�
 
 ### Quick Setup & Update:
 ```bash
-# Initial setup (includes NNC namespaces)
+# Initial setup
 ./auto_setup.sh
 
-# Update aliases with latest NNC features
+# Update aliases with latest features
 make update-aliases
 
 # Manual copy (nếu cần)
 cp .aliases.zsh ~/
 source ~/.zshrc
-```
-
-### Customization:
-Để thay đổi "NNC" thành initials của bạn, edit trong `.aliases.zsh`:
-```bash
-# Change PREFIX_NAMESPACES array to your preferred prefix
-PREFIX_NAMESPACES=(
-    "YourInitials-AUTH"
-    "YourInitials-API"
-    # etc...
-)
 ```
 
 Hoặc sử dụng make command để update toàn bộ:

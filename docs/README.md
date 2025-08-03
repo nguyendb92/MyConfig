@@ -9,7 +9,8 @@
 - **[ENHANCEMENTS.md](./ENHANCEMENTS.md)** - Tóm tắt các tính năng mới và cải tiến
 
 ### 🛠️ Kỹ thuật và Debug
-- **[DebugTechniques.md](./DebugTechniques.md)** - Kỹ thuật debug cho fullstack developer
+- **[FullstackDebugTechniques.md](./FullstackDebugTechniques.md)** - Kỹ thuật debug cho fullstack developer
+- **[NamespaceDebugging.md](./NamespaceDebugging.md)** - Hệ thống namespace logging và quản lý debug logs
 - **[PerformanceOptimization.md](./PerformanceOptimization.md)** - Tối ưu hóa hiệu suất ứng dụng
 - **[TroubleshootingGuide.md](./TroubleshootingGuide.md)** - Xử lý sự cố thường gặp
 
@@ -24,7 +25,7 @@
 1. **Đọc trước**: [README.md chính](../README.md) để hiểu tổng quan
 2. **Cài đặt**: Chạy `./auto_setup.sh` cho cài đặt tự động
 3. **Cấu hình**: Xem [ENHANCEMENTS.md](./ENHANCEMENTS.md) cho các tính năng nâng cao
-4. **Debug**: Tham khảo [DebugTechniques.md](./DebugTechniques.md) khi gặp vấn đề
+4. **Debug**: Tham khảo [FullstackDebugTechniques.md](./FullstackDebugTechniques.md) khi gặp vấn đề
 
 ---
 
@@ -37,12 +38,13 @@
 
 ### 🔧 Developer có kinh nghiệm  
 1. [ENHANCEMENTS.md](./ENHANCEMENTS.md) - Tính năng nâng cao
-2. [DebugTechniques.md](./DebugTechniques.md) - Kỹ thuật debug
-3. [PerformanceOptimization.md](./PerformanceOptimization.md) - Tối ưu hiệu suất
+2. [FullstackDebugTechniques.md](./FullstackDebugTechniques.md) - Kỹ thuật debug
+3. [NamespaceDebugging.md](./NamespaceDebugging.md) - Hệ thống namespace logging
+4. [PerformanceOptimization.md](./PerformanceOptimization.md) - Tối ưu hiệu suất
 
 ### 🚨 Troubleshooting
 1. [TroubleshootingGuide.md](./TroubleshootingGuide.md) - Xử lý sự cố
-2. [DebugTechniques.md](./DebugTechniques.md) - Debug tools
+2. [FullstackDebugTechniques.md](./FullstackDebugTechniques.md) - Debug tools
 3. [QuickReference.md](./QuickReference.md) - Commands để check hệ thống
 
 ---

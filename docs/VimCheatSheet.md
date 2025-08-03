@@ -1,6 +1,6 @@
 # 🎯 Vim Cheat Sheet - MyConfig Edition
 
-> **Based on your personal Vim configuration** (`vimrc`) and VS Code Vim settings  
+> **Base on Vim configuration** (`vimrc`) and VS Code Vim settings  
 > **Leader Key**: `Space` (` `)  
 > **Theme**: Monokai  
 > **Quick Exit**: `jk` (in insert mode)

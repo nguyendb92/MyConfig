@@ -566,7 +566,6 @@ install_additional_tools() {
             "postman"
             "slack --classic"
             "discord"
-            "telegram-desktop"
             "spotify"
             "code --classic"
         )
