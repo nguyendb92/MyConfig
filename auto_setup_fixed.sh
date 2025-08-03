@@ -125,12 +125,9 @@ setup_git() {
     if ! command -v git &> /dev/null; then
         log_error "Git is not installed"
         return 1
-    fi 
-
-    log_section "Enter your Git configuration username and email"
-    log_info "Configuring Git username information..."
+    fi
+    
     read -p "Enter your Git username: " git_username
-    log_info "Configuring Git email information..."
     read -p "Enter your Git email: " git_email
     
     git config --global user.name "$git_username"
@@ -199,120 +196,55 @@ install_python() {
 install_docker() {
     log_section "INSTALLING DOCKER AND DOCKER COMPOSE"
     
-    # Check if Docker is already working (Docker Desktop case)
-    if docker --version >/dev/null 2>&1 && docker ps >/dev/null 2>&1; then
-        log_success "Docker is already available and working!"
-        log_info "Docker version: $(docker --version)"
-        
-        # Check Docker Compose
-        if docker compose version >/dev/null 2>&1; then
-            log_success "Docker Compose is also available: $(docker compose version --short 2>/dev/null || echo 'v2+')"
-        else
-            log_warning "Docker Compose not found, but Docker is working"
-        fi
-        
-        # Ensure user is in docker group for better permissions
-        if ! groups $USER | grep -q docker 2>/dev/null; then
-            log_info "Adding user to docker group for better permissions..."
-            sudo usermod -aG docker $USER
-            log_warning "Please log out and log back in for Docker group changes to take effect"
-        fi
-        
-        log_success "Docker setup already complete - skipping installation"
-        return 0
-    fi
-    
     if [[ "$IS_WSL" == true ]]; then
         log_info "WSL detected - configuring Docker for WSL environment"
         
-        # Check if Docker Desktop is running on Windows (common case)
-        if [[ -S /var/run/docker.sock ]] || [[ -n "$DOCKER_HOST" ]]; then
-            log_info "Docker Desktop appears to be available via WSL integration"
-            
-            # Install only Docker CLI if not present
-            if ! command -v docker &> /dev/null; then
-                log_info "Installing Docker CLI for WSL integration..."
-                
-                # Remove old versions
-                sudo apt remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
-                
-                # Install Docker CLI
-                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-                echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-                
-                sudo apt update
-                sudo apt install -y docker-ce-cli docker-compose-plugin
-                
-                # Add user to docker group
-                sudo usermod -aG docker $USER
-            else
-                log_success "Docker CLI already installed"
-            fi
-        else
-            log_info "Docker Desktop not detected - installing Docker CLI for manual setup"
-            
-            # Remove old versions
-            sudo apt remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
-            
-            # Install Docker CLI
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            
-            sudo apt update
-            sudo apt install -y docker-ce-cli docker-compose-plugin
-            
-            # Add user to docker group
-            sudo usermod -aG docker $USER
-        fi
+        # For WSL, we'll install Docker CLI only and assume Docker Desktop is running on Windows host
+        log_info "Installing Docker CLI for WSL..."
         
-        log_warning "WSL Docker Setup Notes:"
-        log_warning "1. If using Docker Desktop: Make sure it's installed and running on Windows"
+        # Remove old versions
+        sudo apt remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
+        
+        # Install Docker CLI
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        
+        sudo apt update
+        sudo apt install -y docker-ce-cli docker-compose-plugin
+        
+        # Add user to docker group
+        sudo usermod -aG docker $USER
+        
+        log_warning "WSL Setup Notes:"
+        log_warning "1. Make sure Docker Desktop is installed and running on Windows"
         log_warning "2. Enable WSL 2 integration in Docker Desktop settings"
         log_warning "3. Restart WSL after Docker Desktop is configured"
-        log_warning "4. If not using Docker Desktop: Install Docker Desktop or set up remote Docker"
         
     else
         log_info "Native Ubuntu detected - installing full Docker Engine"
         
-        # Check if user wants to install Docker Engine or use Docker Desktop
-        echo -e "\n${YELLOW}Docker Installation Options:${NC}"
-        echo "1. Install Docker Engine (recommended for servers)"
-        echo "2. Skip installation (if using Docker Desktop)"
-        echo ""
-        read -p "Choose option (1-2) [1]: " docker_choice
-        docker_choice=${docker_choice:-1}
+        # Remove old versions
+        sudo apt remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
         
-        case $docker_choice in
-            2)
-                log_info "Skipping Docker Engine installation"
-                log_info "Make sure Docker Desktop is installed if you plan to use Docker"
-                return 0
-                ;;
-            1|*)
-                # Remove old versions
-                sudo apt remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
-                
-                # Install Docker Engine
-                log_info "Installing Docker Engine..."
-                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-                echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-                
-                sudo apt update
-                sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-                
-                # Add user to docker group
-                sudo usermod -aG docker $USER
-                
-                # Start and enable Docker service
-                sudo systemctl start docker
-                sudo systemctl enable docker
-                
-                log_warning "Please log out and log back in for Docker group changes to take effect"
-                ;;
-        esac
+        # Install Docker Engine
+        log_info "Installing Docker Engine..."
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        
+        sudo apt update
+        sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        
+        # Add user to docker group
+        sudo usermod -aG docker $USER
+        
+        # Start and enable Docker service
+        sudo systemctl start docker
+        sudo systemctl enable docker
+        
+        log_warning "Please log out and log back in for Docker group changes to take effect"
     fi
     
-    log_success "Docker configuration completed for your environment"
+    log_success "Docker configured successfully for your environment"
 }
 
 # Install databases
@@ -921,8 +853,8 @@ make_scripts_executable() {
 main() {
     log_section "FULLSTACK DEVELOPER ENVIRONMENT SETUP"
     log_info "Starting automated setup for Ubuntu..."
-    log_warning "This script will install and configure multiple development tools (y/N)"
-
+    log_warning "This script will install and configure multiple development tools"
+    
     read -p "Do you want to continue? (y/N): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
