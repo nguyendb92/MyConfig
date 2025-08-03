@@ -15,6 +15,7 @@ help:
 	@echo "  make setup-vscode     - Setup VS Code configuration only"
 	@echo "  make install-ext      - Install VS Code extensions only"
 	@echo "  make post-setup       - Run post-installation configuration"
+	@echo "  make update-aliases   - Update aliases with personalized namespace (NNC)"
 	@echo "  make check            - Check environment and troubleshoot"
 	@echo "  make update           - Update all tools and packages"
 	@echo "  make backup           - Backup current configurations"
@@ -75,6 +76,37 @@ post-setup:
 	@echo "⚙️  Running post-installation configuration..."
 	@chmod +x post_setup.sh
 	@./post_setup.sh
+
+# Update aliases with personalized namespace
+update-aliases:
+	@echo "🔧 Updating aliases with personalized namespace (NNC)..."
+	@if [ -f ".aliases.zsh" ]; then \
+		echo "📝 Backing up current aliases..."; \
+		cp ~/.aliases.zsh ~/.aliases.zsh.backup.$$(date +%Y%m%d_%H%M%S) 2>/dev/null || true; \
+		echo "🔄 Copying updated aliases..."; \
+		cp .aliases.zsh ~/; \
+		echo "🏷️  Setting up personalized namespace (NNC)..."; \
+		sed -i 's/DEBUG_NAMESPACES\./NNC_DEBUG\./g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/\[AUTH:/[NNC-AUTH:/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/\[API:/[NNC-API:/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/\[DB:/[NNC-DB:/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/\[UI:/[NNC-UI:/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/\[TEMP:/[NNC-TEMP:/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/debug-auth/nnc-debug-auth/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/debug-api/nnc-debug-api/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/debug-db/nnc-debug-db/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/debug-ui/nnc-debug-ui/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/clean-auth/nnc-clean-auth/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/clean-api/nnc-clean-api/g' ~/.aliases.zsh 2>/dev/null || true; \
+		sed -i 's/clean-db/nnc-clean-db/g' ~/.aliases.zsh 2>/dev/null || true; \
+		echo "🔄 Reloading shell configuration..."; \
+		echo "✅ Aliases updated with NNC namespace!"; \
+		echo "💡 Run 'source ~/.zshrc' or restart terminal to apply changes"; \
+		echo "🏷️  New commands: nnc-debug-auth, nnc-debug-api, nnc-debug-db, etc."; \
+	else \
+		echo "❌ .aliases.zsh not found in current directory"; \
+		exit 1; \
+	fi
 
 # Check environment
 check:
@@ -428,3 +460,115 @@ validate:
 	@echo "🔍 Running quick environment validation..."
 	@chmod +x validate_setup.sh
 	@./validate_setup.sh
+
+# Debug log cleanup commands
+debug-help:
+	@echo "🐛 Debug Log Cleanup Commands:"
+	@echo ""
+	@echo "Available debug cleanup targets:"
+	@echo "  make debug-list               - Show available namespaces"
+	@echo "  make debug-dry NS=<namespace> - Preview log removal (dry run)"
+	@echo "  make debug-clean NS=<namespace> - Remove logs with namespace"
+	@echo "  make debug-find NS=<namespace> - Find all logs with namespace"
+	@echo "  make debug-count              - Count logs by namespace"
+	@echo "  make debug-temp-clean         - Clean all TEMP-DEBUG logs"
+	@echo "  make debug-restore            - Restore from backup files"
+	@echo "  make debug-remove-backups     - Remove all backup files"
+	@echo ""
+	@echo "Python-specific commands:"
+	@echo "  make py-debug-dry NS=<namespace> - Preview Python log removal"
+	@echo "  make py-debug-clean NS=<namespace> - Remove Python logs"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make debug-dry NS=TEMP-DEBUG  - Preview TEMP-DEBUG removal"
+	@echo "  make debug-clean NS=API-DEBUG - Remove API-DEBUG logs"
+	@echo "  make debug-count              - Show statistics"
+
+debug-list:
+	@echo "📋 Available Debug Namespaces:"
+	@./scripts/cleanup-debug-logs.sh list
+
+debug-dry:
+	@if [ -z "$(NS)" ]; then \
+		echo "❌ Please specify namespace: make debug-dry NS=TEMP-DEBUG"; \
+		./scripts/cleanup-debug-logs.sh list; \
+	else \
+		./scripts/cleanup-debug-logs.sh dry-run $(NS); \
+	fi
+
+debug-clean:
+	@if [ -z "$(NS)" ]; then \
+		echo "❌ Please specify namespace: make debug-clean NS=TEMP-DEBUG"; \
+		./scripts/cleanup-debug-logs.sh list; \
+	else \
+		./scripts/cleanup-debug-logs.sh cleanup $(NS); \
+	fi
+
+debug-find:
+	@if [ -z "$(NS)" ]; then \
+		echo "❌ Please specify namespace: make debug-find NS=API-DEBUG"; \
+	else \
+		echo "🔍 Finding all [$(NS)] logs..."; \
+		find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" \) ! -path "*/node_modules/*" ! -path "*/dist/*" -exec grep -Hn "\[$(NS)\]" {} \; 2>/dev/null || true; \
+		find . -type f -name "*.py" ! -path "*/venv/*" ! -path "*/__pycache__/*" -exec grep -Hn "\[$(NS)\]" {} \; 2>/dev/null || true; \
+	fi
+
+debug-count:
+	@echo "📊 Debug log statistics:"
+	@echo ""
+	@for ns in API-DEBUG UI-DEBUG AUTH-DEBUG DB-DEBUG PERF-DEBUG TEMP-DEBUG; do \
+		js_count=$$(find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" \) ! -path "*/node_modules/*" ! -path "*/dist/*" -exec grep -c "\[$$ns\]" {} \; 2>/dev/null | awk '{sum+=$$1} END {print sum+0}'); \
+		py_count=$$(find . -type f -name "*.py" ! -path "*/venv/*" ! -path "*/__pycache__/*" -exec grep -c "\[$$ns\]" {} \; 2>/dev/null | awk '{sum+=$$1} END {print sum+0}'); \
+		echo "[$$ns]: JS/TS: $$js_count, Python: $$py_count"; \
+	done
+
+debug-temp-clean:
+	@echo "🧹 Cleaning all TEMP-DEBUG logs..."
+	@echo "📄 Files that will be affected:"
+	@find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" -o -name "*.py" \) ! -path "*/node_modules/*" ! -path "*/venv/*" ! -path "*/dist/*" -exec grep -l "\[TEMP-DEBUG\]" {} \; 2>/dev/null || echo "No TEMP-DEBUG logs found"
+	@echo ""
+	@read -p "Proceed with cleanup? (y/N): " choice; \
+	if [ "$$choice" = "y" ] || [ "$$choice" = "Y" ]; then \
+		find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" -o -name "*.py" \) ! -path "*/node_modules/*" ! -path "*/venv/*" ! -path "*/dist/*" -exec sed -i.backup '/\[TEMP-DEBUG\]/d' {} \; 2>/dev/null; \
+		echo "✅ TEMP-DEBUG logs removed!"; \
+		echo "💡 Backup files created with .backup extension"; \
+	else \
+		echo "ℹ️  Cleanup cancelled"; \
+	fi
+
+debug-restore:
+	@./scripts/cleanup-debug-logs.sh restore
+
+debug-remove-backups:
+	@echo "🗑️  Removing debug cleanup backup files..."
+	@backup_count=$$(find . -name "*.backup" -o -name "*.py.backup" | wc -l); \
+	if [ "$$backup_count" -gt 0 ]; then \
+		echo "Found $$backup_count backup files"; \
+		read -p "Remove all backup files? (y/N): " choice; \
+		if [ "$$choice" = "y" ] || [ "$$choice" = "Y" ]; then \
+			find . -name "*.backup" -delete; \
+			find . -name "*.py.backup" -delete; \
+			echo "✅ All backup files removed!"; \
+		else \
+			echo "ℹ️  Backup cleanup cancelled"; \
+		fi; \
+	else \
+		echo "✅ No backup files found!"; \
+	fi
+
+# Python debug cleanup
+py-debug-dry:
+	@if [ -z "$(NS)" ]; then \
+		echo "❌ Please specify namespace: make py-debug-dry NS=TEMP-DEBUG"; \
+		./scripts/cleanup-python-debug.sh list; \
+	else \
+		./scripts/cleanup-python-debug.sh dry-run $(NS); \
+	fi
+
+py-debug-clean:
+	@if [ -z "$(NS)" ]; then \
+		echo "❌ Please specify namespace: make py-debug-clean NS=TEMP-DEBUG"; \
+		./scripts/cleanup-python-debug.sh list; \
+	else \
+		./scripts/cleanup-python-debug.sh cleanup $(NS); \
+	fi

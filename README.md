@@ -115,6 +115,12 @@ MyConfig/
 ├── vimrc                      # Vim configuration
 ├── .aliases.zsh               # Custom aliases for Zsh
 ├── profile.code-profile       # VS Code profile
+├── docs/                      # 📚 Tài liệu chi tiết
+│   ├── index.md               # Index tài liệu tổng hợp
+│   ├── VimCheatSheet.md       # Vim shortcuts & config
+│   ├── FullstackDebugTechniques.md # Kỹ thuật debug toàn diện
+│   ├── NamespaceDebugging.md  # Hệ thống namespace logging
+│   └── ENHANCEMENTS.md        # Tính năng mới & cải tiến
 ├── vscode/
 │   ├── settings.json          # VS Code settings
 │   ├── keybindings.json       # VS Code keybindings
@@ -255,7 +261,37 @@ vnoremap – Map keys trong visual mode
   - **Authentication**: JWT, OAuth 2.0, Auth0, Firebase Auth
   - **HTTPS/SSL**: Let's Encrypt, Cloudflare
   - **Security Tools**: OWASP ZAP, Snyk, SonarQube
-## 🚨 Lưu ý quan trọng
+## � Tài liệu chi tiết
+
+Xem thêm tài liệu chi tiết trong thư mục **[docs/](./docs/)**:
+
+- **[📖 Vim Cheat Sheet](./docs/VimCheatSheet.md)** - Shortcuts và configuration chi tiết
+- **[🐛 Debug Techniques](./docs/DebugTechniques.md)** - Kỹ thuật debug cho fullstack developer  
+- **[⚡ Performance Optimization](./docs/PerformanceOptimization.md)** - Tối ưu hóa hiệu suất ứng dụng
+- **[🔧 Troubleshooting Guide](./docs/TroubleshootingGuide.md)** - Xử lý sự cố thường gặp
+- **[🆕 Enhancement Summary](./docs/ENHANCEMENTS.md)** - Tính năng mới và cải tiến WSL
+
+## 📚 Documentation & Learning
+
+### 🎓 Quick Start Guides
+- **[📚 Docs Index](./docs/index.md)** - Tổng hợp tất cả tài liệu
+- **[⚡ Vim Cheat Sheet](./docs/VimCheatSheet.md)** - Vim shortcuts và custom config
+
+### 🐛 Advanced Debugging  
+- **[🔧 Fullstack Debug Techniques](./docs/FullstackDebugTechniques.md)** - Kỹ thuật debug toàn diện
+- **[🏷️ Namespace Debugging](./docs/NamespaceDebugging.md)** - Hệ thống log management với namespace
+
+### 💡 Pro Tips
+```bash
+# Quick access to documentation
+debug-help                    # Show all debug commands
+list-namespaces              # Show available log namespaces  
+find-logs AUTH               # Find authentication logs
+remove-logs-dry TEMP         # Preview temp log cleanup
+```
+- **[⚡ Quick Reference](./docs/QuickReference.md)** - Tham khảo nhanh commands và shortcuts
+
+## �🚨 Lưu ý quan trọng
 
 1. **Backup dữ liệu**: Backup các config hiện có trước khi chạy script
 2. **Restart terminal**: Sau khi cài đặt, restart terminal hoặc chạy `source ~/.zshrc`

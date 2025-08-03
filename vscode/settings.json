@@ -418,9 +418,4 @@
     "cSpell.enabled": false,
     "window.zoomLevel": 1,
     "workbench.colorTheme": "One Dark Pro Darker",
-    // "pomodoro.work": 0.1,
-    // "pomodoro.break": 0.1,
-    // pomodoro.repeat : how many pomodoros in a set
-    // pomodoro.longBreak : time of break between sets
-    "pomodoro.autoStart": false,
 }
