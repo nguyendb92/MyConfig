@@ -575,8 +575,45 @@ set wildmode=list:longest  " Bash-like completion
 - All settings are in `~/.vimrc`
 - Plugin settings in `~/.vim/plugged/`
 - Color scheme: Monokai (can be changed in vimrc)
+### Backup Configuration
 - Backup location: `~/.vim/backup/`
 
+---
+
+## 🎯 Advanced Workflow Examples
+
+### Powerful Command Combinations with Relational line numbers
+| Goal | Command | Why It Rocks |
+|------|---------|--------------|
+| Delete 15 lines then paste below | `d15j p` | Relative count = zero guesswork |
+| Comment next 8 lines | `gc8j` | Visual + fast |
+| Indent next 5 | `>5j` | Cleaner alignment |
+| Replace "foo" with "bar" in next 7 lines | `:.,+7s/foo/bar/g` | Efficient scoped change |
+| Move 12 lines down and center | `12jzz` | Ideal for scanning code |
+
+### Screen Positioning Commands
+Combine with `zz`, `zt`, `zb` for better viewport control:
+
+```vim
+5jzz          # Move down 5 lines, center the cursor
+10kzt         # Move up 10 lines, place at top
+8jzb          # Move down 8 lines, place at bottom
+```
+
+**Pro Tip**: Relative numbers + scrolling = control & context
+
+---
+
+## 🔌 Recommended Add-ons
+
+### Enhance Your Workflow
+| Plugin | Purpose |
+|--------|---------|
+| **Vim Surround** | Manage quotes, tags, parentheses easily (`ys`, `ds`, `cs`) |
+| **Vim Commentary** | Toggle comments via `gcc` |
+| **Vim EasyMotion** | Jump to any word fast |
+| **Vim Sneak** | Two-letter motion navigation |
+| **whichkey** | Show possible leader-key mappings |
 ---
 
 *💡 **Remember**: Practice these commands daily to build muscle memory. Start with the basics and gradually incorporate advanced features!*
