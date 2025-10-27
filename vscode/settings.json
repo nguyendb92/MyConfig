@@ -17,6 +17,7 @@
         "#8FBCBB",
         "#434C5E"
     ],
+    "editor.lineNumbers": "relative",
     "vim.statusBarColors.insert": "#BF616A",
     "vim.statusBarColors.visual": "#B48EAD",
     "vim.statusBarColors.visualline": "#B48EAD",
