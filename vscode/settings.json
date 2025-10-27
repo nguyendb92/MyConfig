@@ -6,6 +6,7 @@
     "vim.easymotion": true,
     "vim.hlsearch": true,
     "vim.leader": "<Space>",
+    "vim.foldfix": true,
     "vim.handleKeys": {
         "<C-a>": false,
         "<C-f>": false,
