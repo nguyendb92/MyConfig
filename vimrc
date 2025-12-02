@@ -23,6 +23,9 @@ set smartindent
 call plug#begin()
 Plug 'preservim/NERDTree'
 Plug 'vim-airline/vim-airline'
+Plug 'kshenoy/vim-signature'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'https://github.com/ap/vim-css-color'
 Plug 'easymotion/vim-easymotion'
 Plug 'mattn/emmet-vim'
