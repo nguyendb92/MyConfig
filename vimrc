@@ -1,5 +1,4 @@
 syntax enable
-colorscheme monokai
 " Disable compatibility with vi which can cause unexpected issues.
 set nocompatible
 
@@ -29,7 +28,10 @@ Plug 'tpope/vim-repeat'
 Plug 'https://github.com/ap/vim-css-color'
 Plug 'easymotion/vim-easymotion'
 Plug 'mattn/emmet-vim'
+Plug 'tanvirtin/monokai.nvim'
 call plug#end()
+
+colorscheme monokai
 
 " }}}
 
