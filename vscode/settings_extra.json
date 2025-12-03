@@ -1,0 +1,21 @@
+{
+  "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+  "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+  "vscode-neovim.neovimInitVimPaths.darwin": "~/.config/nvim/init.lua",
+  "editor.cursorBlinking": "solid",
+  "editor.lineNumbers": "relative",
+  "editor.smoothScrolling": true,
+  "editor.minimap.enabled": false,
+  "editor.formatOnSave": true,
+  "files.insertFinalNewline": true,
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "vscode-neovim.afterInitConfig": [
+      "let g:prev_im = 'com.apple.keylayout.ABC'",
+      "autocmd InsertLeave * silent! let g:prev_im = system('/opt/homebrew/bin/macism') | lua vim.fn.jobstart({'/opt/homebrew/bin/macism', 'com.apple.keylayout.ABC'})",
+      "autocmd InsertEnter * silent! lua vim.fn.jobstart({'/opt/homebrew/bin/macism', vim.g.prev_im:gsub('%s+', '')})"
+    ]
+}
