@@ -1,0 +1,189 @@
+{
+    // --- GENERAL EDITOR SETTINGS ---
+    "editor.lineNumbers": "relative",
+    "editor.cursorBlinking": "solid",
+    "editor.smoothScrolling": true,
+    "editor.minimap.enabled": false,
+    "editor.formatOnSave": true,
+    "editor.renderWhitespace": "all",
+    "editor.tabSize": 4,
+    "editor.fontSize": 14,
+    "editor.fontWeight": "500",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll.eslint": "explicit"
+    },
+    "editor.accessibilitySupport": "off",
+    "editor.inlineSuggest.enabled": true,
+    "files.insertFinalNewline": true,
+    "files.autoSave": "onWindowChange",
+    "explorer.confirmDelete": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "zenMode.centerLayout": true,
+    "zenMode.fullScreen": true,
+    "zenMode.hideLineNumbers": false,
+    "zenMode.hideStatusBar": false,
+
+    // --- THEME & APPEARANCE ---
+    "workbench.colorTheme": "One Dark Pro Darker",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#8FBCBB",
+        "statusBar.noFolderBackground": "#8FBCBB",
+        "statusBar.debuggingBackground": "#8FBCBB",
+        "statusBar.foreground": "#434C5E",
+        "statusBar.debuggingForeground": "#434C5E"
+    },
+
+    // --- VIM SETTINGS (VSCodeVim) ---
+    "vim.leader": "<Space>",
+    "vim.useSystemClipboard": true,
+    "vim.easymotion": true,
+    "vim.hlsearch": true,
+    "vim.showMarksInGutter": true,
+
+    // NEOVIM INTEGRATION (Backend)
+    "vim.enableNeovim": true,
+    "vim.neovimPath": "/opt/homebrew/bin/nvim",
+    
+    // --- VIETNAMESE INPUT METHOD FIX (Auto Switch) ---
+    // This assumes you have 'macism' installed via brew
+    "vim.autoSwitchInputMethod.enable": true,
+    "vim.autoSwitchInputMethod.defaultIM": "com.apple.keylayout.ABC",
+    "vim.autoSwitchInputMethod.obtainIMCmd": "/opt/homebrew/bin/macism",
+    "vim.autoSwitchInputMethod.switchIMCmd": "/opt/homebrew/bin/macism {im}",
+
+    // --- VIM KEY BINDINGS ---
+    
+    // Handle special keys
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false,
+        "<C-c>": false,
+        "<C-v>": false,
+        "<C-x>": false
+    },
+
+    // Insert Mode: jk to Escape (Crucial for Vietnamese users)
+    "vim.insertModeKeyBindingsNonRecursive": [
+        {
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
+        }
+    ],
+
+    // Visual Mode
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["g", "y"],
+            "after": ["y", "`", "y"]
+        }
+    ],
+
+    // Normal Mode
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // VS Code UI Actions
+        { "before": ["<leader>", "p"], "commands": ["workbench.action.showCommands"] },
+        { "before": ["<leader>", "s", "b"], "commands": ["workbench.action.toggleSidebarVisibility"] },
+        { "before": ["<leader>", "c", "o"], "commands": ["workbench.action.closeEditorsInOtherGroups"] },
+        { "before": ["<leader>", "c", "a"], "commands": ["workbench.action.closeAllEditors"] },
+        { "before": ["<leader>", "c", "w"], "commands": ["workbench.action.closeActiveEditor"] },
+        { "before": ["<leader>", "z", "m"], "commands": ["workbench.action.toggleZenMode"] },
+        
+        // Window Resizing
+        { "before": ["<C-up>"], "commands": ["workbench.action.increaseViewHeight"] },
+        { "before": ["<C-down>"], "commands": ["workbench.action.decreaseViewHeight"] },
+        { "before": ["<C-left>"], "commands": ["workbench.action.decreaseViewWidth"] },
+        { "before": ["<C-right>"], "commands": ["workbench.action.increaseViewWidth"] },
+        
+        // Window Navigation
+        { "before": ["<C-h>"], "after": ["<C-w>", "h"] },
+        { "before": ["<C-j>"], "after": ["<C-w>", "j"] },
+        { "before": ["<C-k>"], "after": ["<C-w>", "k"] },
+        { "before": ["<C-l>"], "after": ["<C-w>", "l"] },
+
+        // Tab Navigation
+        { "before": ["<Leader>", "t", "t"], "commands": [":tabnew"] },
+        { "before": ["<Leader>", "t", "n"], "commands": [":tabnext"] },
+        { "before": ["<Leader>", "t", "p"], "commands": [":tabprev"] },
+        { "before": ["<Leader>", "t", "o"], "commands": [":tabo"] },
+
+        // Undo/Redo/Search
+        { "before": ["u"], "commands": ["undo"] },
+        { "before": ["<C-r>"], "commands": ["redo"] },
+        { "before": ["<Leader>", "/"], "commands": [":noh"] },
+
+        // Movement Tricks
+        { "before": ["L"], "after": ["g", "_"] },
+        { "before": ["H"], "after": ["^"] },
+        { "before": ["J"], "after": ["5", "j"] },
+        { "before": ["K"], "after": ["5", "k"] },
+        { "before": ["'"], "after": ["`"] },
+
+        // Insert new lines without entering insert mode immediately (Standard mappings usually do enter insert)
+        // Your mapping kept them in insert mode but added Esc.
+        { "before": ["O"], "after": ["O", "<Esc>"] },
+        { "before": ["o"], "after": ["o", "<Esc>"] },
+
+        // Go to end of paste
+        { "before": ["<leader>", "g", "i"], "after": ["g", "i", "<Esc>"] },
+
+        // Paste from system clipboard logic
+        { "before": ["V"], "after": ["m", "y", "V"] },
+        { "before": ["v"], "after": ["m", "y", "v"] }
+    ],
+
+    // --- VIM STATUS BAR COLORS ---
+    "vim.statusBarColorControl": true,
+    "vim.statusBarColors.normal": ["#8FBCBB", "#434C5E"],
+    "vim.statusBarColors.insert": "#BF616A",
+    "vim.statusBarColors.visual": "#B48EAD",
+    "vim.statusBarColors.visualline": "#B48EAD",
+    "vim.statusBarColors.visualblock": "#A3BE8C",
+    "vim.statusBarColors.replace": "#D08770",
+    "vim.statusBarColors.commandlineinprogress": "#007ACC",
+    "vim.statusBarColors.searchinprogressmode": "#007ACC",
+    "vim.statusBarColors.easymotionmode": "#007ACC",
+    "vim.statusBarColors.easymotioninputmode": "#007ACC",
+    "vim.statusBarColors.surroundinputmode": "#007ACC",
+
+    // --- PROGRAMMING LANGUAGES ---
+    
+    // Python
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.formatOnType": true
+    },
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "black",
+    "python.analysis.autoImportCompletions": false,
+    
+    // Code Runner
+    "code-runner.saveAllFilesBeforeRun": true,
+    "code-runner.runInTerminal": true,
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.showExecutionMessage": false,
+    "code-runner.saveFileBeforeRun": true,
+    "code-runner.executorMap": {
+        "python": "$pythonPath -u $fullFileName"
+    },
+
+    // Git
+    "git.autofetch": true,
+    "git.openRepositoryInParentFolders": "always",
+    "github.copilot.nextEditSuggestions.enabled": true,
+
+    // Markdown
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    },
+
+    // Others
+    "typescript.suggest.autoImports": false,
+    "makefile.configureOnOpen": true,
+    "hediet.vscode-drawio.theme": "dark",
+    "redhat.telemetry.enabled": true,
+    "cSpell.enabled": false,
+    "vscode-neovim.neovimInitVimPaths.darwin": "~/.config/nvim/init.lua"
+}

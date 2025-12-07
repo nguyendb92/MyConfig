@@ -204,6 +204,14 @@ vnoremap – Map keys trong visual mode
 - `L`: Move to end of line
 - `J/K`: Move 5 lines down/up
 
+####
+Cach set speed key repeate on macos
+
+```bash
+defaults write -g KeyRepeat -int 1
+defaults write -g IntialKeyRepeat -int 10
+```
+
 ### Phần mềm trên windows (Recommended)
 - [cgwin](https://www.cygwin.com/setup-x86_64.exe)
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/install)

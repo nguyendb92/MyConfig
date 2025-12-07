@@ -11,6 +11,8 @@ map("n", "H", "^")
 map("n", "L", "$")
 map("n", "J", "5j")
 map("n", "K", "5k")
+-- map("n", "o", "o<Esc>")
+map("n", "O", "O<Esc>")
 
 -- Tăng tốc delete/change
 map("n", "x", '"_x')

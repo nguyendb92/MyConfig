@@ -1,32 +1,37 @@
 -- VSCode mode – Dùng keymap & motion của Vim thật
-require("config.options")
-require("config.keymaps")
 
--- Không dùng plugin UI nặng
-vim.g.lazyvim_plugin_list = {
-  telescope = false,
-  treesitter = false,
-  cmp = false,
-  noice = false,
-  dressing = false,
-}
+local vscode = require('vscode')
 
--- Gọi lệnh VSCode bằng Neovim keymap
-local map = vim.keymap.set
-local notify = function(cmd) vim.fn.VSCodeNotify(cmd) end
+-- Remap movement keys giống LazyVim
+vim.keymap.set("n", "<leader>e", function()
+  vscode.action("workbench.view.explorer")
+end)
 
--- File explorer (giống LazyVim)
-map("n", "<leader>e", function() notify("workbench.view.explorer") end)
+vim.keymap.set("n", "<leader>f", function()
+  vscode.action("workbench.action.quickOpen")
+end)
+
+vim.keymap.set("n", "<leader>g", function()
+  vscode.action("git.openChange")
+end)
+
+vim.keymap.set("n", "<leader>q", function()
+  vscode.action("workbench.action.closeActiveEditor")
+end)
 
 -- Search giống LazyVim
-map("n", "<leader>ff", function() notify("workbench.action.quickOpen") end)
-
--- Toggle terminal
-map("n", "<leader>t", function() notify("workbench.action.terminal.toggleTerminal") end)
+vim.keymap.set("n", "<leader>ss", function()
+  vscode.action("workbench.action.findInFiles")
+end)
 
 -- Format
-map("n", "<leader>cf", function() notify("editor.action.formatDocument") end)
+vim.keymap.set("n", "<leader>ff", function()
+  vscode.action("editor.action.formatDocument")
+end)
 
 -- Comment
-map({ "n", "v" }, "gc", function() notify("editor.action.commentLine") end)
+vim.keymap.set({"n", "x"}, "<leader>/", function()
+  vscode.action("editor.action.commentLine")
+end)
+
 

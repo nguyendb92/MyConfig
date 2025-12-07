@@ -19,6 +19,7 @@ require("lazy").setup({
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import/override with your plugins
+
     { import = "plugins" },
   },
   defaults = {
@@ -49,5 +50,11 @@ require("lazy").setup({
         "zipPlugin",
       },
     },
+  },
+  defaults = {
+    cond = function(plugin)
+      -- Load plugin if: not in VSCode, OR plugin has vscode = true
+      return not vim.g.vscode or plugin.vscode
+    end,
   },
 })
