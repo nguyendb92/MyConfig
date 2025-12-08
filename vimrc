@@ -28,6 +28,8 @@ Plug 'tpope/vim-repeat'
 Plug 'https://github.com/ap/vim-css-color'
 Plug 'easymotion/vim-easymotion'
 Plug 'mattn/emmet-vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'tanvirtin/monokai.nvim'
 call plug#end()
 
@@ -54,7 +56,7 @@ nnoremap K 5k
 nnoremap ' `
 
 
-nnoremap o o<esc>
+" nnoremap o o<esc>
 nnoremap O O<esc>
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
