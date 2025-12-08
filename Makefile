@@ -47,8 +47,11 @@ help:
 	@echo -e "$(GREEN)📋 Core Commands:$(NC)"
 	@echo "  make install          - 🚀 Full automated installation (recommended)"
 	@echo "  make setup-vim        - ⚡ Setup Vim configuration only"
+	@echo "  make setup-neovim     - 🚀 Setup Neovim configuration only"
 	@echo "  make setup-vscode     - 🎨 Setup VS Code configuration only"
+	@echo "  make setup-vscode-neovim - 🎨 Setup VS Code Neovim configuration only"
 	@echo "  make install-ext      - 🔌 Install VS Code extensions only"
+	@echo "  make install-tools    - 🛠️  Install additional tools (lazygit, zoxide, etc.)"
 	@echo "  make post-setup       - ⚙️  Run post-installation configuration"
 	@echo "  make update-aliases   - 🔄 Update aliases"
 	@echo ""
@@ -96,6 +99,12 @@ setup-vim:
 	@chmod +x setup_vim.sh
 	@./setup_vim.sh
 
+# Setup Neovim configuration
+setup-neovim:
+	$(call log_info,"Setting up Neovim configuration...")
+	@chmod +x setup_neovim.sh
+	@./setup_neovim.sh
+
 # Setup VS Code configuration
 setup-vscode:
 	$(call log_info,"Setting up VS Code configuration...")
@@ -109,11 +118,30 @@ setup-vscode:
 		exit 1; \
 	fi
 
+# Setup VS Code Neovim configuration
+setup-vscode-neovim:
+	$(call log_info,"Setting up VS Code Neovim configuration...")
+	@if [ -d "vscode" ]; then \
+		mkdir -p ~/.config/Code/User; \
+		cp vscode/neovim_settings.json ~/.config/Code/User/settings.json 2>/dev/null || true; \
+		cp vscode/neovim_keybindings.json ~/.config/Code/User/keybindings.json 2>/dev/null || true; \
+		$(call log_success,"VS Code Neovim configuration updated"); \
+	else \
+		$(call log_error,"VS Code configuration directory not found"); \
+		exit 1; \
+	fi
+
 # Install VS Code extensions
 install-ext:
 	$(call log_info,"Installing VS Code extensions...")
 	@chmod +x install_extensions.sh
 	@./install_extensions.sh
+
+# Install additional tools (lazygit, lazydocker, zoxide, etc.)
+install-tools:
+	$(call log_info,"Installing additional tools...")
+	@chmod +x install_tools.sh
+	@./install_tools.sh
 
 # Post-installation setup
 post-setup:

@@ -1,0 +1,40 @@
+{
+    // --- VS Code Editor UI Tweaks for Vim Users ---
+    "editor.lineNumbers": "relative", // Relative line numbers for easy jumping (e.g., 5j)
+    "editor.renderLineHighlight": "all", // Highlight the entire current line
+    "editor.cursorSurroundingLines": 5, // Keep 5 lines of context above/below cursor when scrolling
+    "editor.cursorBlinking": "solid", // specific to block cursor preference
+    "editor.cursorSmoothCaretAnimation": "on", // Smooth cursor movement (optional, looks nice)
+    "editor.minimap.enabled": false, // Optional: Hide activity bar for a cleaner UI
+    // --- VSCode Neovim Extension Settings ---
+    // IMPORTANT: Point to your specific Neovim executable. 
+    // If nvim is in your PATH, you might not need this, but it's safer to set it.
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+    "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+    // "vscode-neovim.neovimExecutablePaths.win32": "C:\\Program Files\\Neovim\\bin\\nvim.exe",
+    // Map 'jj' or 'jk' to Escape in Insert Mode (super common Vim workflow)
+    "vscode-neovim.neovimInitVimPaths.linux": "~/.config/nvim/init.lua",
+    "vscode-neovim.compositeKeys": {
+        "jj": {
+            "command": "vscode-neovim.escape"
+        },
+        "jk": {
+            "command": "vscode-neovim.escape"
+        }
+    },
+    // Performance optimization: Give the extension its own process
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    // Optional: Sync VS Code clipboard with Neovim + register
+    "vscode-neovim.neovimInitVimPaths.darwin": "~/.config/nvim/init.lua",
+    "editor.accessibilitySupport": "off",
+    "DockerRun.DisableAutoGenerateConfig": true,
+    "workbench.editor.editorActionsLocation": "titleBar",
+    "workbench.statusBar.visible": true,
+    "workbench.sideBar.location": "left",
+    "vscode-neovim.afterInitConfig": [
+        "autocmd InsertLeave * silent! lua vim.fn.jobstart({'/opt/homebrew/bin/macism', 'com.apple.keylayout.ABC'})"
+    ],
+    "editor.showFoldingControls": "always"
+}
