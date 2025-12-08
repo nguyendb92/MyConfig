@@ -56,7 +56,6 @@ help:
 	@echo "  make update-aliases   - 🔄 Update aliases"
 	@echo ""
 	@echo -e "$(GREEN)🔍 Validation & Maintenance:$(NC)"
-	@echo "  make validate         - ✅ Comprehensive environment validation"
 	@echo "  make check            - 🔧 Quick environment check"
 	@echo "  make update           - 📦 Update all tools and packages"
 	@echo "  make backup           - 💾 Backup current configurations"
@@ -166,12 +165,6 @@ update-aliases:
 # VALIDATION & MAINTENANCE - System checking and maintenance
 # =============================================================================
 
-# Comprehensive validation
-validate:
-	$(call log_info,"Running comprehensive validation...")
-	@chmod +x validate_standalone.sh
-	@./validate_standalone.sh
-
 # Quick environment check
 check:
 	$(call log_info,"Running quick environment check...")
@@ -273,11 +266,11 @@ dev-status:
 # WSL-SPECIFIC COMMANDS - Windows Subsystem for Linux
 # =============================================================================
 
-# WSL advanced setup
+# WSL post setup
 wsl-setup:
 	$(call log_info,"Running WSL-specific setup...")
-	@chmod +x wsl_advanced_setup.sh
-	@./wsl_advanced_setup.sh
+	@chmod +x wsl_post_setup.sh
+	@./wsl_post_setup.sh
 
 # Check if running in WSL
 wsl-check:

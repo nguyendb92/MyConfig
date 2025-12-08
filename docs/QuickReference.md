@@ -83,9 +83,6 @@ make check
 # WSL specific check
 make wsl-check
 
-# Quick validation
-./validate_simple.sh
-
 # WSL info
 wsl-info
 ```
