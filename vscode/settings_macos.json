@@ -323,25 +323,6 @@
                 "<ESC>"
             ]
         },
-        // {
-        //     "before": [
-        //         "o"
-        //     ],
-        //     "after": [
-        //         "o",
-        //         "<ESC>"
-        //     ]
-        // },
-        // {
-        //     "before": [
-        //     "s"
-        //     ],
-        //     "after": [
-        //     "space",
-        //     "space",
-        //     "s"
-        //     ]
-        // },
         {
             "before": ["s"],
             "commands": ["flash-vscode.start"]
