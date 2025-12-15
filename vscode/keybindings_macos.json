@@ -32,7 +32,40 @@
     "when": "vim.mode == 'Normal' && editorTextFocus",
     "command": "workbench.action.toggleSidebarVisibility"
   },
-
+  // Search all navigation to use vim keys
+  // esc search input to use j/k to navigate results
+  // add escape for source control too
+  // Navigate changes in git diff
+  {
+    "key": "ctrl+n",
+    "command": "workbench.action.compareEditor.nextChange",
+    "when": "textCompareEditorVisible"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.compareEditor.previousChange",
+    "when": "textCompareEditorVisible"
+  },
+  {
+    "key": "escape",
+    "command": "list.focusFirst",
+    "when": "scmRepository && focusedView == 'workbench.scm'"
+  },
+  {
+    "key": "escape",
+    "command": "search.action.focusSearchList",
+    "when": "searchViewletFocus && searchViewletVisible && searchInputBoxFocus"
+  },
+  {
+    "key": "j",
+    "command": "list.focusDown",
+    "when": "searchViewletFocus && vim.mode == 'Normal'"
+  },
+  {
+    "key": "k",
+    "command": "list.focusUp",
+    "when": "searchViewletFocus && vim.mode == 'Normal'"
+  },
   // File Explorer
   {
     "key": "r",
