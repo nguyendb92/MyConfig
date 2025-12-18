@@ -161,5 +161,40 @@
   {
     "key": "cmd+-",
     "command": "-workbench.action.zoomOut"
-  }
+  },
+  {
+    "key": "f16",
+    "command": "workbench.action.openRecent"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "-workbench.action.openRecent"
+  },
+  {
+    "key": "cmd+i",
+    "command": "-markdown.extension.editing.toggleItalic",
+    "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
+  },
+  {
+    "key": "ctrl+h",
+    "command": "togglePeekWidgetFocus",
+    "when": "referenceSearchVisible && listFocus && !inputFocus"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "togglePeekWidgetFocus",
+    "when": "referenceSearchVisible && !listFocus"
+  },
+  {
+    "key": "cmd+k n",
+    "command": "gitlens.diffWithNext"
+  },
+  {
+    "key": "cmd+k p",
+    "command": "gitlens.diffWithPrevious"
+  },
+  {
+    "key": "cmd+k g",
+    "command": "git-graph.view"
+  },
 ]
