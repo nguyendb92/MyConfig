@@ -29,6 +29,7 @@ Space = C(KC_B)
 
 Để tạo phím tắt `Control + `` (Backtick) trên VIA cho bàn phím Keychron, bạn sử dụng mã QMK trong phần Any.
 Mã QMK cần dùng: LCTL(KC_GRV)
+Add new key
 
 # Layer 3
 
