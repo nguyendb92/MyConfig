@@ -303,6 +303,25 @@ auto_cicd() {
     # Build URLs for links
     local branch_url="${web_url}/tree/${current_branch}"
     local commit_url="${web_url}/commit/${commit_full_hash}"
+
+    # Link-friendly display values
+    local branch_display="$current_branch"
+    local commit_display="$commit_hash"
+    if [[ -n "$web_url" ]]; then
+        branch_display="<${branch_url}|${current_branch}>"
+        commit_display="<${commit_url}|${commit_hash}>"
+    fi
+
+    # Files changed list (bullet points)
+    local files_list=$(git diff --name-only HEAD~1 2>/dev/null)
+    if [[ -z "$files_list" ]]; then
+        files_list=$(git diff --name-only HEAD 2>/dev/null)
+    fi
+    if [[ -n "$files_list" ]]; then
+        files_list=$(printf '%s\n' "$files_list" | sed 's/^/- /')
+    else
+        files_list="(no files detected)"
+    fi
     
     # Step 7: Git push
     if [[ "$do_push" == true ]]; then
@@ -335,15 +354,18 @@ auto_cicd() {
 :rocket: *Deployment Report*
 ----------------------------
 :file_folder: *Repository:* ${repo_name}
-:seedling: *Branch:* ${current_branch}
+:seedling: *Branch:* ${branch_display}
 :bust_in_silhouette: *Author:* ${commit_author}
 :calendar: *Date:* ${commit_date}
 
-:memo: *Commit:* ${commit_hash}
+:memo: *Commit:* ${commit_display}
 :speech_balloon: *Message:* ${commit_message}
 
 :bar_chart: *Changes:*
 ${files_changed}
+
+:page_facing_up: *Files Changed:*
+${files_list}
 
 :link: *Full Hash:* ${commit_full_hash}
 ----------------------------
