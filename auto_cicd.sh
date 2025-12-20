@@ -203,6 +203,22 @@ auto_cicd() {
     local current_branch=$(git rev-parse --abbrev-ref HEAD)
     local repo_name=$(basename "$(git rev-parse --show-toplevel)")
     
+    # Get remote URL and convert to web URL
+    local remote_url=$(git config --get remote.origin.url)
+    local web_url=""
+    if [[ "$remote_url" == git@github.com:* ]]; then
+        web_url="https://github.com/${remote_url#git@github.com:}"
+        web_url="${web_url%.git}"
+    elif [[ "$remote_url" == git@gitlab.com:* ]]; then
+        web_url="https://gitlab.com/${remote_url#git@gitlab.com:}"
+        web_url="${web_url%.git}"
+    elif [[ "$remote_url" == git@bitbucket.org:* ]]; then
+        web_url="https://bitbucket.org/${remote_url#git@bitbucket.org:}"
+        web_url="${web_url%.git}"
+    elif [[ "$remote_url" == https://* ]]; then
+        web_url="${remote_url%.git}"
+    fi
+    
     echo -e "\n${GREEN}🚀 AUTO CI/CD WORKFLOW STARTED${NC}"
     echo -e "${CYAN}📂 Repository: ${repo_name}${NC}"
     echo -e "${CYAN}🌿 Branch: ${current_branch}${NC}"
@@ -269,6 +285,10 @@ auto_cicd() {
     local commit_author=$(git log -1 --pretty=format:"%an")
     local commit_date=$(git log -1 --pretty=format:"%ad" --date=short)
     local files_changed=$(git diff --stat HEAD~1 2>/dev/null | tail -1 || echo "N/A")
+    
+    # Build URLs for links
+    local branch_url="${web_url}/tree/${current_branch}"
+    local commit_url="${web_url}/commit/${commit_full_hash}"
     
     # Step 7: Git push
     if [[ "$do_push" == true ]]; then
