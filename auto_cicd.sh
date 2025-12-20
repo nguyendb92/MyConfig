@@ -98,14 +98,12 @@ send_slack_notification() {
         return 0
     fi
     
-    # Escape JSON special chars and convert real newlines to literal \n for Slack
+    # Escape JSON special chars and convert real newlines to \n (Slack respects these)
     local escaped_message
     escaped_message=$(printf '%s' "$message" | \
-        sed -e 's/\\/\\\\/g' \
-            -e 's/"/\\"/g' \
-            -e 's/\t/\\t/g' \
-            -e ':a;N;$!ba;s/\n/\\n/g')
+        perl -0pe 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g; s/\n/\\n/g')
     
+    # Build payload
     local payload
     payload=$(cat <<EOF
 {
@@ -122,10 +120,11 @@ send_slack_notification() {
 EOF
 )
     
+    # Send with --data-binary to avoid curl mangling newlines
     local response=$(curl -s -o /dev/null -w "%{http_code}" \
         -X POST \
         -H "Content-Type: application/json" \
-        -d "$payload" \
+        --data-binary "$payload" \
         "$SLACK_WEBHOOK_URL")
     
     if [[ "$response" == "200" ]]; then
