@@ -88,6 +88,26 @@ alias gofs='cd ~/Projects/fullstack'
 alias goln='cd ~/Projects/learning'
 alias godo='cd ~/Projects/devops'
 
+# ================================
+# 🚀 AUTO CI/CD
+# ================================
+# Source the auto_cicd script
+if [[ -f ~/.auto_cicd.sh ]]; then
+    source ~/.auto_cicd.sh
+elif [[ -f ~/MyConfig/auto_cicd.sh ]]; then
+    source ~/MyConfig/auto_cicd.sh
+fi
+
+# Auto CI/CD aliases
+alias ac='auto_cicd'
+alias qc='quick_commit'
+
+# CI/CD shortcuts with common options
+alias anp='auto_cicd --no-push'
+alias ans='auto_cicd --no-slack'
+alias alc='auto_cicd --no-push --no-slack'
+
+
 # custom for certain project
 
 # Clean & restart

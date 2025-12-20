@@ -7,7 +7,7 @@
 # Usage: make [target] - See 'make help' for available targets
 # =============================================================================
 
-.PHONY: help install setup-vim setup-vscode install-extensions post-setup check clean validate update backup restore dev-start dev-stop dev-status info wsl-setup wsl-check wsl-services wsl-restart update-aliases
+.PHONY: help install setup-vim setup-vscode install-extensions post-setup check clean validate update backup restore dev-start dev-stop dev-status info wsl-setup wsl-check wsl-services wsl-restart update-aliases reload-aliases
 
 # Include common functions
 SHELL := /bin/bash
@@ -53,7 +53,8 @@ help:
 	@echo "  make install-ext      - 🔌 Install VS Code extensions only"
 	@echo "  make install-tools    - 🛠️  Install additional tools (lazygit, zoxide, etc.)"
 	@echo "  make post-setup       - ⚙️  Run post-installation configuration"
-	@echo "  make update-aliases   - 🔄 Update aliases"
+	@echo "  make update-aliases   - 🔄 Update aliases to home directory"
+	@echo "  make reload-aliases   - 🔄 Update and show reload command"
 	@echo ""
 	@echo -e "$(GREEN)🔍 Validation & Maintenance:$(NC)"
 	@echo "  make check            - 🔧 Quick environment check"
@@ -154,8 +155,23 @@ update-aliases:
 	@if [ -f ".aliases.zsh" ]; then \
 		cp ~/.aliases.zsh ~/.aliases.zsh.backup.$$(date +%Y%m%d_%H%M%S) 2>/dev/null || true; \
 		cp .aliases.zsh ~/; \
+		cp auto_cicd.sh ~/; \
 		$(call log_success,"Aliases updated successfully"); \
-		echo "🔄 Reload with: source ~/.zshrc"; \
+		echo "🔄 Reload with: source ~/.aliases.zsh"; \
+	else \
+		$(call log_error,".aliases.zsh not found in current directory"); \
+		exit 1; \
+	fi
+
+# Update and reload aliases
+reload-aliases:
+	$(call log_info,"Updating and reloading aliases...")
+	@if [ -f ".aliases.zsh" ]; then \
+		cp ~/.aliases.zsh ~/.aliases.zsh.backup.$$(date +%Y%m%d_%H%M%S) 2>/dev/null || true; \
+		cp .aliases.zsh ~/; \
+		cp auto_cicd.sh ~/; \
+		$(call log_success,"Aliases updated successfully"); \
+		@echo "✅ Run: source ~/.aliases.zsh"; \
 	else \
 		$(call log_error,".aliases.zsh not found in current directory"); \
 		exit 1; \

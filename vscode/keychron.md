@@ -25,3 +25,12 @@ enter = Command + K Z -> Toggle Zen mode
 [ (Prev Tab): LGUI(S(KC_LBRC))
 ] (Next Tab): LGUI(S(KC_RBRC))
 G = (Command + K): LGUI(KC_K)
+Space = C(KC_B)
+
+Để tạo phím tắt `Control + `` (Backtick) trên VIA cho bàn phím Keychron, bạn sử dụng mã QMK trong phần Any.
+Mã QMK cần dùng: LCTL(KC_GRV)
+
+# Layer 3
+
+- (Win Mode): Space = LCTL(KC_K)
+- Space = C(KC_B)
