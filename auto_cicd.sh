@@ -253,6 +253,8 @@ auto_cicd() {
         return 0
     fi
     
+    print_step "Git Status changes before (git add $add_mode):"
+    git status
     # Confirm before proceeding
     echo -e "\n${YELLOW}Do you want to proceed with the commit? (Y/n):${NC} "
     read -r proceed_choice
