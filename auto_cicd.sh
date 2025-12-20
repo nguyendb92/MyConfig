@@ -104,8 +104,6 @@ send_slack_notification() {
         sed 's/"/\\"/g' | \
         sed 's/\t/\\t/g' | \
         awk '{printf "%s\\n", $0}' | \
-        sed 's/\\n$//')
-    
     local payload=$(cat <<EOF
 {
     "blocks": [
