@@ -98,55 +98,35 @@ send_slack_notification() {
         return 0
     fi
     
-    # Create temp files
-    local msg_file=$(mktemp)
-    local payload_file=$(mktemp)
+    # Escape JSON special chars and convert real newlines to literal \n for Slack
+    local escaped_message
+    escaped_message=$(printf '%s' "$message" | \
+        sed -e 's/\\/\\\\/g' \
+            -e 's/"/\\"/g' \
+            -e 's/\t/\\t/g' \
+            -e ':a;N;$!ba;s/\n/\\n/g')
     
-    # Write message to temp file
-    printf '%s' "$message" > "$msg_file"
-    
-    # Use Python to create properly escaped JSON payload
-    python3 << 'PYTHON_SCRIPT' "$msg_file" "$payload_file"
-import json
-import sys
-
-msg_file = sys.argv[1]
-payload_file = sys.argv[2]
-
-with open(msg_file, 'r') as f:
-    message = f.read()
-
-payload = {
+    local payload
+    payload=$(cat <<EOF
+{
     "blocks": [
         {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": message
+                "text": "$escaped_message"
             }
         }
     ]
 }
-
-with open(payload_file, 'w') as f:
-    json.dump(payload, f)
-PYTHON_SCRIPT
-    
-    # Check if Python succeeded
-    if [[ ! -s "$payload_file" ]]; then
-        print_warning "Failed to create Slack payload"
-        rm -f "$msg_file" "$payload_file"
-        return 1
-    fi
+EOF
+)
     
     local response=$(curl -s -o /dev/null -w "%{http_code}" \
         -X POST \
         -H "Content-Type: application/json" \
-        -d @"$payload_file" \
+        -d "$payload" \
         "$SLACK_WEBHOOK_URL")
-    
-    # Cleanup
-    rm -f "$msg_file" "$payload_file"
     
     if [[ "$response" == "200" ]]; then
         print_success "Slack notification sent!"
