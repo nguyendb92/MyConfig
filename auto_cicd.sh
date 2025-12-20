@@ -103,9 +103,9 @@ send_slack_notification() {
     escaped_message=$(printf '%s' "$message" | \
         perl -0pe 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g; s/\n/\\n/g')
     
-    # Build payload
-    local payload
-    payload=$(cat <<EOF
+    # Build payload into temp file to avoid shell mangling
+    local tmp_payload=$(mktemp)
+    cat > "$tmp_payload" <<EOF
 {
     "blocks": [
         {
@@ -118,14 +118,14 @@ send_slack_notification() {
     ]
 }
 EOF
-)
     
-    # Send with --data-binary to avoid curl mangling newlines
+    # Send with --data-binary from file
     local response=$(curl -s -o /dev/null -w "%{http_code}" \
         -X POST \
         -H "Content-Type: application/json" \
-        --data-binary "$payload" \
+        --data-binary "@$tmp_payload" \
         "$SLACK_WEBHOOK_URL")
+    rm -f "$tmp_payload"
     
     if [[ "$response" == "200" ]]; then
         print_success "Slack notification sent!"
