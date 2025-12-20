@@ -90,7 +90,6 @@ copy_to_clipboard() {
     return 0
 }
 
-# Send Slack notification
 send_slack_notification() {
     local message="$1"
     
@@ -99,10 +98,25 @@ send_slack_notification() {
         return 0
     fi
     
+    # Escape special characters for JSON
+    local escaped_message=$(echo "$message" | \
+        sed 's/\\/\\\\/g' | \
+        sed 's/"/\\"/g' | \
+        sed 's/\t/\\t/g' | \
+        awk '{printf "%s\\n", $0}' | \
+        sed 's/\\n$//')
+    
     local payload=$(cat <<EOF
 {
-    "text": "$message",
-    "mrkdwn": true
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "$escaped_message"
+            }
+        }
+    ]
 }
 EOF
 )
