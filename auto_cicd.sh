@@ -98,12 +98,15 @@ send_slack_notification() {
         return 0
     fi
     
-    # Escape special characters for JSON
+    # Escape special characters for JSON and convert newlines to \n
     local escaped_message=$(echo "$message" | \
         sed 's/\\/\\\\/g' | \
         sed 's/"/\\"/g' | \
         sed 's/\t/\\t/g' | \
+        sed 's/`/\\`/g' | \
         awk '{printf "%s\\n", $0}' | \
+        sed 's/\\n$//')
+    
     local payload=$(cat <<EOF
 {
     "blocks": [
@@ -359,9 +362,7 @@ EOF
     # Step 10: Send Slack notification
     if [[ "$do_slack" == true ]]; then
         print_step "Step 10: Sending Slack notification"
-        # Escape special characters for Slack JSON
-        local slack_message=$(echo "$report")
-        send_slack_notification "$slack_message"
+        send_slack_notification "$report"
     else
         print_step "Step 10: Skipping Slack notification (--no-slack)"
     fi
