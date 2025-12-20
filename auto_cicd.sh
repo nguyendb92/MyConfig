@@ -360,7 +360,7 @@ EOF
     if [[ "$do_slack" == true ]]; then
         print_step "Step 10: Sending Slack notification"
         # Escape special characters for Slack JSON
-        local slack_message=$(echo "$report" | sed 's/"/\\"/g' | tr '\n' ' ' | sed 's/  / /g')
+        local slack_message=$(echo "$report")
         send_slack_notification "$slack_message"
     else
         print_step "Step 10: Skipping Slack notification (--no-slack)"
