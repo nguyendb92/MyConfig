@@ -98,14 +98,20 @@ send_slack_notification() {
         return 0
     fi
     
-    # Escape special characters for JSON and convert newlines to \n
-    local escaped_message=$(echo "$message" | \
-        sed 's/\\/\\\\/g' | \
-        sed 's/"/\\"/g' | \
-        sed 's/\t/\\t/g' | \
-        sed 's/`/\\`/g' | \
-        awk '{printf "%s\\n", $0}' | \
-        sed 's/\\n$//')
+    # Build JSON payload using printf for proper escaping
+    local escaped_message
+    escaped_message=$(printf '%s' "$message" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))' 2>/dev/null)
+    
+    # Fallback if python3 not available
+    if [[ -z "$escaped_message" ]]; then
+        escaped_message=$(printf '%s' "$message" | \
+            sed 's/\\/\\\\/g' | \
+            sed 's/"/\\"/g' | \
+            sed 's/	/\\t/g' | \
+            awk 'BEGIN{ORS="\\n"} {print}' | \
+            sed 's/\\n$//')
+        escaped_message="\"$escaped_message\""
+    fi
     
     local payload=$(cat <<EOF
 {
@@ -114,7 +120,7 @@ send_slack_notification() {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "$escaped_message"
+                "text": $escaped_message
             }
         }
     ]
@@ -333,21 +339,21 @@ auto_cicd() {
     print_step "Step 8: Generating report"
     
     local report=$(cat <<EOF
-🚀 *Deployment Report*
-━━━━━━━━━━━━━━━━━━━━━━━━━
-📂 *Repository:* ${repo_name}
-🌿 *Branch:* ${current_branch}
-👤 *Author:* ${commit_author}
-📅 *Date:* ${commit_date}
+:rocket: *Deployment Report*
+----------------------------
+:file_folder: *Repository:* ${repo_name}
+:seedling: *Branch:* ${current_branch}
+:bust_in_silhouette: *Author:* ${commit_author}
+:calendar: *Date:* ${commit_date}
 
-📝 *Commit:* \`${commit_hash}\`
-💬 *Message:* ${commit_message}
+:memo: *Commit:* ${commit_hash}
+:speech_balloon: *Message:* ${commit_message}
 
-📊 *Changes:*
+:bar_chart: *Changes:*
 ${files_changed}
 
-🔗 *Full Hash:* ${commit_full_hash}
-━━━━━━━━━━━━━━━━━━━━━━━━━
+:link: *Full Hash:* ${commit_full_hash}
+----------------------------
 EOF
 )
     
